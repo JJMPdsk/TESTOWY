@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using Microsoft.Owin.Security.DataProtection;
 using SendGrid;
 
 namespace Auth
@@ -21,6 +22,8 @@ namespace Auth
 
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
+
+        public static IDataProtectionProvider DataProtectionProvider { get; private set; }
         public ApplicationUserManager(IUserStore<ApplicationUser> store, IIdentityMessageService emailService, IdentityFactoryOptions<ApplicationUserManager> options)
             : base(store)
         {
@@ -43,7 +46,8 @@ namespace Auth
                 RequireLowercase = true,
                 RequireUppercase = true
             };
-            var dataProtectionProvider = options.DataProtectionProvider;
+           // var dataProtectionProvider = options.DataProtectionProvider;
+           DataProtectionProvider = options.DataProtectionProvider;
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,

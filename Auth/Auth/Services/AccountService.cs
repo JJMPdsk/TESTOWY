@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Policy;
 using System.Threading.Tasks;
@@ -27,6 +28,13 @@ namespace Auth.Services
         public AccountService()
         {
 
+        }
+
+        public AccountService(IUnitOfWork unitOfWork, IAuthenticationManager authenticationManager, ApplicationUserManager userManager)
+        {
+            _unitOfWork = unitOfWork;
+            _authenticationManager = authenticationManager;
+            _userManager = userManager;
         }
 
         public AccountService(IUnitOfWork unitOfWork, ApplicationUserManager userManager, ISecureDataFormat<AuthenticationTicket> accessTokenFormat, IAuthenticationManager authenticationManager)

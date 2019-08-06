@@ -16,6 +16,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using AutoMapper;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -27,12 +28,17 @@ namespace Auth
     {
         private static IContainer _container;
 
+        public static IContainer Container => _container;
+
         public static void Register(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterType<ApplicationDbContext>().As<DbContext>();
             containerBuilder.RegisterType<ApplicationDbContext>().InstancePerRequest();
+            containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+
+
             //containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
-//            containerBuilder.RegisterType<AutoMapperProfile>().As<IMapper>();
+            //            containerBuilder.RegisterType<AutoMapperProfile>().As<IMapper>();
 
 
             //containerBuilder.Register(c => new MapperConfiguration(cfg => { cfg.AddProfile(new AutoMapperProfile()); }))
@@ -46,18 +52,23 @@ namespace Auth
 
             // ASP.NET identity
 
-            containerBuilder.RegisterType<ApplicationUserManager>().AsSelf().InstancePerRequest();
+            containerBuilder.RegisterType<EmailService>().As<IIdentityMessageService>().InstancePerRequest();
+            containerBuilder.RegisterType<ApplicationUserManager>().InstancePerRequest();
+            containerBuilder.Register<IDataProtectionProvider>(c => Startup.DataProtectionProvider).InstancePerRequest();
+            
+
             containerBuilder.Register(c => new UserStore<ApplicationUser>(c.Resolve<ApplicationDbContext>()))
                 .AsImplementedInterfaces().InstancePerRequest();
             containerBuilder.Register(c => HttpContext.Current.GetOwinContext().Authentication)
                 .As<IAuthenticationManager>();
             containerBuilder.Register(c => new IdentityFactoryOptions<ApplicationUserManager>
             {
-                DataProtectionProvider = new DpapiDataProtectionProvider("Auth")
+                DataProtectionProvider = new DpapiDataProtectionProvider("ASP.NET Identity")
             });
 
 
             containerBuilder.RegisterType<UserStore<ApplicationUser>>().AsImplementedInterfaces().InstancePerRequest();
+
 
 
             RegisterRepositories(containerBuilder);
@@ -67,7 +78,10 @@ namespace Auth
             containerBuilder.RegisterControllers(Assembly.GetExecutingAssembly());
             containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
+
+
             _container = containerBuilder.Build();
+
             DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
             _container.BeginLifetimeScope();
         }
@@ -80,9 +94,9 @@ namespace Auth
         private static void RegisterRepositories(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
-            containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
+           // containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
 
-            containerBuilder.Register(ctx => ctx.Resolve<UnitOfWork.UnitOfWork>()).As<IUnitOfWork>();
+            //containerBuilder.Register(ctx => ctx.Resolve<UnitOfWork.UnitOfWork>()).As<IUnitOfWork>();
         }
 
         /// <summary>
