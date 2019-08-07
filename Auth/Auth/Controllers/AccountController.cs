@@ -14,6 +14,8 @@ namespace Auth.Controllers
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
 
+        #region Constructors
+
         public AccountController()
         {
         }
@@ -23,6 +25,8 @@ namespace Auth.Controllers
             _accountService = accountService;
             _mapper = mapper;
         }
+
+        #endregion
 
 
         #region Helpers
@@ -37,7 +41,7 @@ namespace Auth.Controllers
             if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
             return RedirectToAction("Index", "Home");
         }
-        
+
         #endregion
 
 
@@ -84,19 +88,18 @@ namespace Auth.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            bool loginSucceeded = await _accountService.Login(model);
+            var loginSucceeded = await _accountService.Login(model);
 
             if (loginSucceeded) return RedirectToLocal(returnUrl);
             ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło.");
             // If we got this far, something failed, redisplay form
             return View(model);
-
         }
 
         [HttpGet]
         public async Task<ActionResult> EditProfile()
         {
-            var user = await _accountService.FindByNameAsync(HttpContext.User.Identity.Name);
+            var user = await _accountService.FindUserByNameAsync(HttpContext.User.Identity.Name);
             var model = _mapper.Map<ApplicationUser, EditProfileViewModel>(user);
             return View(model);
         }
@@ -106,7 +109,7 @@ namespace Auth.Controllers
         public async Task<ActionResult> EditProfile(EditProfileViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = await _accountService.FindByNameAsync(HttpContext.User.Identity.Name);
+            var user = await _accountService.FindUserByNameAsync(HttpContext.User.Identity.Name);
 
             _mapper.Map(model, user);
 
@@ -131,7 +134,7 @@ namespace Auth.Controllers
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = await _accountService.FindByNameAsync(HttpContext.User.Identity.Name);
+            var user = await _accountService.FindUserByNameAsync(HttpContext.User.Identity.Name);
             var result = await _accountService.ChangeUserPasswordAsync(user.Id, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
                 return RedirectToAction("Login", "Account");
@@ -154,7 +157,7 @@ namespace Auth.Controllers
         {
             if (userId == null || code == null)
                 return View("Error");
-            var result = await _accountService.ConfirmEmail(userId, code);
+            var result = await _accountService.ConfirmUserEmail(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
@@ -171,7 +174,7 @@ namespace Auth.Controllers
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = await _accountService.FindByEmailAsync(model.Email);
+            var user = await _accountService.FindUserByEmailAsync(model.Email);
 
             if (user == null || !await _accountService.IsUserEmailConfirmedAsync(user.Id))
                 // Don't reveal that the user does not exist or is not confirmed
@@ -206,7 +209,7 @@ namespace Auth.Controllers
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = await _accountService.FindByNameAsync(model.UserName);
+            var user = await _accountService.FindUserByNameAsync(model.UserName);
             if (user == null)
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
@@ -232,8 +235,8 @@ namespace Auth.Controllers
         }
 
         /// <summary>
-        /// Do testowania roli usera
-        /// GET: /Account
+        ///     Do testowania roli usera
+        ///     GET: /Account
         /// </summary>
         /// <returns></returns>
         [HttpGet]

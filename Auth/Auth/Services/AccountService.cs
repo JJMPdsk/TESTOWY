@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using Auth.Models;
 using Auth.Services.Interfaces;
 using Auth.UnitOfWork;
@@ -20,6 +19,7 @@ namespace Auth.Services
         private readonly ApplicationUserManager _userManager;
 
         #region Constructors
+
         public AccountService()
         {
         }
@@ -65,7 +65,7 @@ namespace Auth.Services
             return IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> ConfirmEmail(string userId, string code)
+        public async Task<IdentityResult> ConfirmUserEmail(string userId, string code)
         {
             var result = await _userManager.ConfirmEmailAsync(userId, code);
 
@@ -87,13 +87,13 @@ namespace Auth.Services
         }
 
 
-        public async Task<ApplicationUser> FindByNameAsync(string name)
+        public async Task<ApplicationUser> FindUserByNameAsync(string name)
         {
             var user = await _userManager.FindByNameAsync(name);
             return user;
         }
 
-        public async Task<ApplicationUser> FindByEmailAsync(string email)
+        public async Task<ApplicationUser> FindUserByEmailAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             return user;
@@ -133,6 +133,7 @@ namespace Auth.Services
         {
             _authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }
+
         #endregion
 
 
@@ -145,13 +146,13 @@ namespace Auth.Services
             _authenticationManager.SignIn(new AuthenticationProperties {IsPersistent = isPersistent}, identity);
         }
 
-        private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
+        private async Task<string> SendEmailConfirmationTokenAsync(string userId, string subject)
         {
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(userID);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(userId);
             var callbackUrl = new Uri(Constants.Home + "/Account/ConfirmEmail")
-                .AddParameter("userId", userID)
+                .AddParameter("userId", userId)
                 .AddParameter("code", code).ToString();
-            await _userManager.SendEmailAsync(userID, subject,
+            await _userManager.SendEmailAsync(userId, subject,
                 "Potwierdź swoje konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
 
             return callbackUrl;
