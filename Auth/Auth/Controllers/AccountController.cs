@@ -1,30 +1,21 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Auth.Models;
-using Auth.Repository.Interfaces;
-using Auth.Services;
 using Auth.Services.Interfaces;
 using Auth.ViewModels.Account;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.DataHandler;
 
 namespace Auth.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
 
         public AccountController()
         {
-            
         }
 
         public AccountController(IAccountService accountService, IMapper mapper)
@@ -32,6 +23,22 @@ namespace Auth.Controllers
             _accountService = accountService;
             _mapper = mapper;
         }
+
+
+        #region Helpers
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors) ModelState.AddModelError("", error);
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index", "Home");
+        }
+        
+        #endregion
 
 
         #region Actions
@@ -149,22 +156,22 @@ namespace Auth.Controllers
         //    return View(model);
         //}
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult ConfirmEmailApi()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ConfirmEmailApi()
+        {
+            return View();
+        }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public async Task<ActionResult> ConfirmEmail(string userId, string code)
-        //{
-        //    if (userId == null || code == null)
-        //        return View("Error");
-        //    var result = await _userManager.ConfirmEmailAsync(userId, code);
-        //    return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+                return View("Error");
+            var result = await _accountService.ConfirmEmail(userId, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
 
         //[HttpGet]
         //[AllowAnonymous]
@@ -251,40 +258,6 @@ namespace Auth.Controllers
         //public ActionResult Index()
         //{
         //    return View();
-        //}
-
-        #endregion
-
-
-        #region Helpers
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors) ModelState.AddModelError("", error);
-        }
-
-        //private ActionResult RedirectToLocal(string returnUrl)
-        //{
-        //    if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
-        //    return RedirectToAction("Index", "Home");
-        //}
-
-        //private async Task SignInAsync(ApplicationUser user, bool isPersistent)
-        //{
-        //    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-        //    var identity = await _userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-        //    AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = isPersistent}, identity);
-        //}
-
-        //private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
-        //{
-        //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(userID);
-        //    var callbackUrl = Url.Action("ConfirmEmail", "Account",
-        //        new {userId = userID, code}, Request.Url.Scheme);
-        //    await _userManager.SendEmailAsync(userID, subject,
-        //        "Potwierdź swoje konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
-
-        //    return callbackUrl;
         //}
 
         #endregion

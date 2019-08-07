@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
@@ -16,6 +15,7 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using AutoMapper;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -25,14 +25,17 @@ namespace Auth
 {
     public static class AutoFacContainer
     {
-        private static IContainer _container;
+        public static IContainer Container { get; private set; }
 
         public static void Register(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterType<ApplicationDbContext>().As<DbContext>();
             containerBuilder.RegisterType<ApplicationDbContext>().InstancePerRequest();
+            containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+
+
             //containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
-//            containerBuilder.RegisterType<AutoMapperProfile>().As<IMapper>();
+            //            containerBuilder.RegisterType<AutoMapperProfile>().As<IMapper>();
 
 
             //containerBuilder.Register(c => new MapperConfiguration(cfg => { cfg.AddProfile(new AutoMapperProfile()); }))
@@ -46,14 +49,18 @@ namespace Auth
 
             // ASP.NET identity
 
-            containerBuilder.RegisterType<ApplicationUserManager>().AsSelf().InstancePerRequest();
+            containerBuilder.RegisterType<EmailService>().As<IIdentityMessageService>().InstancePerRequest();
+            containerBuilder.RegisterType<ApplicationUserManager>().InstancePerRequest();
+            containerBuilder.Register(c => Startup.DataProtectionProvider).InstancePerRequest();
+
+
             containerBuilder.Register(c => new UserStore<ApplicationUser>(c.Resolve<ApplicationDbContext>()))
                 .AsImplementedInterfaces().InstancePerRequest();
             containerBuilder.Register(c => HttpContext.Current.GetOwinContext().Authentication)
                 .As<IAuthenticationManager>();
             containerBuilder.Register(c => new IdentityFactoryOptions<ApplicationUserManager>
             {
-                DataProtectionProvider = new DpapiDataProtectionProvider("Auth")
+                DataProtectionProvider = new DpapiDataProtectionProvider("ASP.NET Identity")
             });
 
 
@@ -67,9 +74,11 @@ namespace Auth
             containerBuilder.RegisterControllers(Assembly.GetExecutingAssembly());
             containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            _container = containerBuilder.Build();
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
-            _container.BeginLifetimeScope();
+
+            Container = containerBuilder.Build();
+
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(Container));
+            Container.BeginLifetimeScope();
         }
 
         private static void RegisterServices(ContainerBuilder containerBuilder)
@@ -80,13 +89,13 @@ namespace Auth
         private static void RegisterRepositories(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
-            containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
+            // containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
 
-            containerBuilder.Register(ctx => ctx.Resolve<UnitOfWork.UnitOfWork>()).As<IUnitOfWork>();
+            //containerBuilder.Register(ctx => ctx.Resolve<UnitOfWork.UnitOfWork>()).As<IUnitOfWork>();
         }
 
         /// <summary>
-        /// Registers the AutoMapper profile from the external assemblies.
+        ///     Registers the AutoMapper profile from the external assemblies.
         /// </summary>
         /// <param name="containerBuilder">The containerBuilder.</param>
         private static void RegisterMaps(ContainerBuilder containerBuilder)
@@ -94,14 +103,11 @@ namespace Auth
             var profiles =
                 from t in typeof(AutoMapperProfile).Assembly.GetTypes()
                 where typeof(Profile).IsAssignableFrom(t)
-                select (Profile)Activator.CreateInstance(t);
+                select (Profile) Activator.CreateInstance(t);
 
             containerBuilder.Register(ctx => new MapperConfiguration(cfg =>
             {
-                foreach (var profile in profiles)
-                {
-                    cfg.AddProfile(profile);
-                }
+                foreach (var profile in profiles) cfg.AddProfile(profile);
             }));
 
             containerBuilder.Register(ctx => ctx.Resolve<MapperConfiguration>().CreateMapper()).As<IMapper>();

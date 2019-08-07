@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 using Auth.Models;
 using Exceptions;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
+using Microsoft.Owin.Security.DataProtection;
 using SendGrid;
 
 namespace Auth
@@ -21,21 +20,19 @@ namespace Auth
 
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store, IIdentityMessageService emailService, IdentityFactoryOptions<ApplicationUserManager> options)
+        public ApplicationUserManager(IUserStore<ApplicationUser> store, IIdentityMessageService emailService,
+            IdentityFactoryOptions<ApplicationUserManager> options)
             : base(store)
         {
             EmailService = emailService;
 
-            
-            // Configure validation logic for usernames
-
-            this.UserValidator = new UserValidator<ApplicationUser>(this)
+            UserValidator = new UserValidator<ApplicationUser>(this)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
             // Configure validation logic for passwords
-            this.PasswordValidator = new PasswordValidator
+            PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
                 RequireNonLetterOrDigit = true,
@@ -44,37 +41,15 @@ namespace Auth
                 RequireUppercase = true
             };
             var dataProtectionProvider = options.DataProtectionProvider;
+            if (dataProtectionProvider != null)
+                UserTokenProvider =
+                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
+                    {
+                        TokenLifespan = TimeSpan.FromHours(3)
+                    };
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
-            IOwinContext context)
-        {
-            ApplicationUserManager manager = null;
-            //// Configure validation logic for usernames
-
-            //manager.UserValidator = new UserValidator<ApplicationUser>(manager)
-            //{
-            //    AllowOnlyAlphanumericUserNames = false,
-            //    RequireUniqueEmail = true
-            //};
-            //// Configure validation logic for passwords
-            //manager.PasswordValidator = new PasswordValidator
-            //{
-            //    RequiredLength = 6,
-            //    RequireNonLetterOrDigit = true,
-            //    RequireDigit = true,
-            //    RequireLowercase = true,
-            //    RequireUppercase = true
-            //};
-            //var dataProtectionProvider = options.DataProtectionProvider;
-            //if (dataProtectionProvider != null)
-            //    manager.UserTokenProvider =
-            //        new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
-            //        {
-            //            TokenLifespan = TimeSpan.FromHours(3)
-            //        };
-            return manager;
-        }
+        public static IDataProtectionProvider DataProtectionProvider { get; private set; }
     }
 
     public class EmailService : IIdentityMessageService

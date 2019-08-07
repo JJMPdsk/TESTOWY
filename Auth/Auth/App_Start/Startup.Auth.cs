@@ -1,5 +1,4 @@
 ﻿using System;
-using Auth.Models;
 using Auth.Providers;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;

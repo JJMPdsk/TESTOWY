@@ -3,10 +3,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Auth.Controllers;
-using Auth.Infrastructure;
 using Autofac;
-using Autofac.Integration.Mvc;
 
 namespace Auth
 {
@@ -16,7 +13,6 @@ namespace Auth
         {
             AutoFacContainer.Register(new ContainerBuilder());
 
-       
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
