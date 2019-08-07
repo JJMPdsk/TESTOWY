@@ -97,7 +97,7 @@ namespace Auth.Controllers
         public async Task<ActionResult> EditProfile()
         {
             var user = await _accountService.FindByNameAsync(HttpContext.User.Identity.Name);
-            var model = Mapper.Map<ApplicationUser, EditProfileViewModel>(user);
+            var model = _mapper.Map<ApplicationUser, EditProfileViewModel>(user);
             return View(model);
         }
 
@@ -108,7 +108,7 @@ namespace Auth.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = await _accountService.FindByNameAsync(HttpContext.User.Identity.Name);
 
-            Mapper.Map(model, user);
+            _mapper.Map(model, user);
 
             var result = await _accountService.UpdateUserAsync(user);
 
