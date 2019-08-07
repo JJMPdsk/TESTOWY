@@ -63,72 +63,62 @@ namespace Auth.Controllers
 
             if (result.Succeeded) return RedirectToAction("Index", "Home");
 
-
             AddErrors(result);
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult Login(string returnUrl)
-        //{
-        //    ViewBag.ReturnUrl = returnUrl;
-        //    return View();
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
-        //{
-        //    if (!ModelState.IsValid) return View(model);
-        //    var user = await _userManager.FindAsync(model.UserName, model.Password);
-        //    if (user != null)
-        //    {
-        //        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-        //        await SignInAsync(user, model.RememberMe);
-        //        return RedirectToLocal(returnUrl);
-        //    }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        {
+            if (!ModelState.IsValid) return View(model);
 
-        //    ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło.");
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+            bool loginSucceeded = await _accountService.Login(model);
 
-        //[HttpGet]
-        //public async Task<ActionResult> EditProfile()
-        //{
-        //    var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-        //    var model = new EditProfileViewModel
-        //    {
-        //        BirthDate = user.BirthDate,
-        //        LastName = user.LastName,
-        //        FirstName = user.FirstName
-        //    };
-        //    return View(model);
-        //}
+            if (loginSucceeded) return RedirectToLocal(returnUrl);
+            ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło.");
+            // If we got this far, something failed, redisplay form
+            return View(model);
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> EditProfile(EditProfileViewModel model)
-        //{
-        //    if (!ModelState.IsValid) return View(model);
-        //    var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-        //    user.FirstName = model.FirstName;
-        //    user.LastName = model.LastName;
-        //    user.BirthDate = model.BirthDate;
+        }
 
-        //    var result = await _userManager.UpdateAsync(user);
+        [HttpGet]
+        public async Task<ActionResult> EditProfile()
+        {
+            var user = await _accountService.FindByNameAsync(HttpContext.User.Identity.Name);
+            var model = Mapper.Map<ApplicationUser, EditProfileViewModel>(user);
+            return View(model);
+        }
 
-        //    if (result.Succeeded)
-        //        ViewBag.Message = "Profil został zaktualizowany";
-        //    else
-        //        ModelState.AddModelError("", "Wystąpił błąd podczas zapisu");
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            var user = await _accountService.FindByNameAsync(HttpContext.User.Identity.Name);
 
-        //    return View(model);
-        //}
+            Mapper.Map(model, user);
+
+            var result = await _accountService.UpdateUserAsync(user);
+
+            if (result.Succeeded)
+                ViewBag.Message = "Profil został zaktualizowany";
+            else
+                ModelState.AddModelError("", "Wystąpił błąd podczas zapisu");
+
+            return View(model);
+        }
 
         //[HttpGet]
         //public ActionResult ChangePassword()

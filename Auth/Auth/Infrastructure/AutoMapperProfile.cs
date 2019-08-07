@@ -8,8 +8,6 @@ namespace Auth.Infrastructure
     {
         public AutoMapperProfile()
         {
-            // CreateMap<Day, DayViewModel>();
-            // CreateMap<DayViewModel, Day>();
             CreateMap<RegisterViewModel, ApplicationUser>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.EmailConfirmed, opt => opt.Ignore())
@@ -22,6 +20,9 @@ namespace Auth.Infrastructure
                 .ForMember(x => x.LockoutEnabled, opt => opt.Ignore())
                 .ForMember(x => x.AccessFailedCount, opt => opt.Ignore());
             CreateMap<ApplicationUser, RegisterViewModel>();
+
+            CreateMap<ApplicationUser, EditProfileViewModel>();
+            CreateMap<EditProfileViewModel, ApplicationUser>();
         }
     }
 }

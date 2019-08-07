@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using Auth.Models;
 using Auth.Services.Interfaces;
 using Auth.UnitOfWork;
+using Auth.ViewModels.Account;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -17,7 +19,7 @@ namespace Auth.Services
 
         private readonly ApplicationUserManager _userManager;
 
-
+        #region Constructors
         public AccountService()
         {
         }
@@ -30,6 +32,7 @@ namespace Auth.Services
             _userManager = userManager;
         }
 
+        // prawdopodobnie do wyrzucenia
         public AccountService(IUnitOfWork unitOfWork, ApplicationUserManager userManager,
             ISecureDataFormat<AuthenticationTicket> accessTokenFormat, IAuthenticationManager authenticationManager)
         {
@@ -39,6 +42,10 @@ namespace Auth.Services
             AccessTokenFormat = accessTokenFormat;
         }
 
+        #endregion
+
+
+        // prawdopodobnie do wyrzucenia
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; }
 
         #region Public methods
@@ -63,6 +70,28 @@ namespace Auth.Services
             var result = await _userManager.ConfirmEmailAsync(userId, code);
 
             return result.Succeeded ? IdentityResult.Success : result;
+        }
+
+        public async Task<bool> Login(LoginViewModel model)
+        {
+            var user = await _userManager.FindAsync(model.UserName, model.Password);
+            if (user == null) return false;
+            _authenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            await SignInAsync(user, model.RememberMe);
+            return true;
+        }
+
+
+        public async Task<ApplicationUser> FindByNameAsync(string name)
+        {
+            var user = await _userManager.FindByNameAsync(name);
+            return user;
+        }
+
+        public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
+        {
+            var result = await _userManager.UpdateAsync(user);
+            return result;
         }
 
         #endregion
