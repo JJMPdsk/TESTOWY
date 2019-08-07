@@ -120,31 +120,26 @@ namespace Auth.Controllers
             return View(model);
         }
 
-        //[HttpGet]
-        //public ActionResult ChangePassword()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
-        //        var result = await _userManager.ChangePasswordAsync(user.Id, model.OldPassword, model.NewPassword);
-        //        if (result.Succeeded)
-        //        {
-        //            AuthenticationManager.SignOut();
-        //            return RedirectToAction("Login", "Account");
-        //        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            var user = await _accountService.FindByNameAsync(HttpContext.User.Identity.Name);
+            var result = await _accountService.ChangeUserPasswordAsync(user.Id, model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+                return RedirectToAction("Login", "Account");
 
-        //        AddErrors(result);
-        //    }
+            AddErrors(result);
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
         [HttpGet]
         [AllowAnonymous]

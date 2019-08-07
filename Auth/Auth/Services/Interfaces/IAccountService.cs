@@ -12,5 +12,7 @@ namespace Auth.Services.Interfaces
         Task<bool> Login(LoginViewModel model);
         Task<ApplicationUser> FindByNameAsync(string name);
         Task<IdentityResult> UpdateUserAsync(ApplicationUser user);
+        Task<IdentityResult> ChangeUserPasswordAsync(string userId, string oldPassword, string newPassword);
+
     }
 }

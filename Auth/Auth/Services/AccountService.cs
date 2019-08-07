@@ -94,6 +94,15 @@ namespace Auth.Services
             return result;
         }
 
+        public async Task<IdentityResult> ChangeUserPasswordAsync(string userId, string oldPassword, string newPassword)
+        {
+            var result = await _userManager.ChangePasswordAsync(userId, oldPassword, newPassword);
+            if (result.Succeeded) _authenticationManager.SignOut();
+            return result;
+        }
+
+
+
         #endregion
 
 
