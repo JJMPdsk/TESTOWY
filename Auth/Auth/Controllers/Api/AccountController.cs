@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Auth.Models;
 using Auth.Services.Interfaces;
@@ -27,6 +28,16 @@ namespace Auth.Controllers.Api
         {
             _accountService = accountService;
             _mapper = mapper;
+        }
+
+        public AccountController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
+        public AccountController(IAccountService accountService)
+        {
+            _accountService = accountService;
         }
 
         #endregion

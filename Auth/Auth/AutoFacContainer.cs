@@ -3,7 +3,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
+using Auth.Controllers.Api;
 using Auth.Infrastructure;
 using Auth.Models;
 using Auth.Repository;
@@ -33,19 +35,9 @@ namespace Auth
             containerBuilder.RegisterType<ApplicationDbContext>().InstancePerRequest();
             containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
 
+            var config = new HttpConfiguration();
 
-            //containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
-            //            containerBuilder.RegisterType<AutoMapperProfile>().As<IMapper>();
-
-
-            //containerBuilder.Register(c => new MapperConfiguration(cfg => { cfg.AddProfile(new AutoMapperProfile()); }))
-            //    .AsSelf().SingleInstance();
-
-            //containerBuilder.Register(c => c.Resolve<MapperConfiguration>().CreateMapper(c.Resolve)).As<IMapper>()
-            //    .InstancePerLifetimeScope();
-
-
-            //containerBuilder.RegisterType<Mapper>().As<IMapper>();
+            containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             // ASP.NET identity
 
@@ -72,10 +64,12 @@ namespace Auth
             RegisterMaps(containerBuilder);
 
             containerBuilder.RegisterControllers(Assembly.GetExecutingAssembly());
-            containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
 
             Container = containerBuilder.Build();
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
+
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(Container));
             Container.BeginLifetimeScope();
@@ -89,9 +83,6 @@ namespace Auth
         private static void RegisterRepositories(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
-            // containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
-
-            //containerBuilder.Register(ctx => ctx.Resolve<UnitOfWork.UnitOfWork>()).As<IUnitOfWork>();
         }
 
         /// <summary>
