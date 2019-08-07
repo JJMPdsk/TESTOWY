@@ -10,7 +10,7 @@ using Microsoft.Owin.Security;
 
 namespace Auth.Services
 {
-    public class AccountService : IAccountService
+    public class AccountService : IAccountService, IDisposable
     {
         private readonly IAuthenticationManager _authenticationManager;
         private readonly IUnitOfWork _unitOfWork;
@@ -99,6 +99,12 @@ namespace Auth.Services
             return user;
         }
 
+        public async Task<ApplicationUser> FindUserByIdAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return user;
+        }
+
 
         public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
         {
@@ -129,9 +135,9 @@ namespace Auth.Services
             return result;
         }
 
-        public void Logout()
+        public void Logout(string authType)
         {
-            _authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            _authenticationManager.SignOut(authType);
         }
 
         #endregion
@@ -156,6 +162,12 @@ namespace Auth.Services
                 "Potwierdź swoje konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
 
             return callbackUrl;
+        }
+
+        public void Dispose()
+        {
+            _unitOfWork?.Dispose();
+            _userManager?.Dispose();
         }
 
         #endregion

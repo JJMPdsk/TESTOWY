@@ -1,14 +1,10 @@
-﻿using System;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Policy;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
 using Auth.Models;
+using Auth.Services.Interfaces;
 using Auth.ViewModels.Account;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 
 namespace Auth.Controllers.Api
@@ -17,28 +13,24 @@ namespace Auth.Controllers.Api
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
-        private ApplicationUserManager _userManager;
+        private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
+
+
+        #region Constructors
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+        public AccountController(IAccountService accountService, IMapper mapper)
         {
-            UserManager = userManager;
-            AccessTokenFormat = accessTokenFormat;
+            _accountService = accountService;
+            _mapper = mapper;
         }
 
-        public ApplicationUserManager UserManager
-        {
-            get => _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            private set => _userManager = value;
-        }
+        #endregion
 
-        private IAuthenticationManager Authentication => Request.GetOwinContext().Authentication;
-
-        public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; }
 
         #region REST API
 
@@ -50,24 +42,11 @@ namespace Auth.Controllers.Api
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = new ApplicationUser
-            {
-                UserName = model.UserName,
-                Email = model.Email,
-                LastName = model.LastName,
-                FirstName = model.FirstName,
-                BirthDate = model.BirthDate
-            };
+            var user = _mapper.Map<RegisterViewModel, ApplicationUser>(model);
 
-            var result = await UserManager.CreateAsync(user, model.Password);
+            var result = await _accountService.Register(user, model.Password);
 
-            if (!result.Succeeded) return GetErrorResult(result);
-
-            await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "User"));
-
-            await SendEmailConfirmationTokenAsync(user.Id, "Potwierdź swoje konto");
-
-            return Ok();
+            return !result.Succeeded ? GetErrorResult(result) : Ok();
         }
 
         // GET api/Account/ConfirmEmail
@@ -78,20 +57,16 @@ namespace Auth.Controllers.Api
         {
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
             {
-                ModelState.AddModelError("", "userID i code są wymagane");
+                ModelState.AddModelError("", "userId i code są wymagane");
                 return BadRequest(ModelState);
             }
 
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            var result = await _accountService.ConfirmUserEmail(userId, code);
 
-            if (!result.Succeeded)
-            {
-                GetErrorResult(result);
-                return BadRequest();
-            }
+            if (result.Succeeded) return Redirect($"{Constants.Home}/Account/ConfirmEmailApi");
 
-            var homeUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority);
-            return Redirect($"{homeUrl}/Account/ConfirmEmailApi");
+            GetErrorResult(result);
+            return BadRequest();
         }
 
         // POST api/Account/EditProfile
@@ -99,18 +74,14 @@ namespace Auth.Controllers.Api
         [Route("EditProfile")]
         public async Task<IHttpActionResult> EditProfile(EditProfileViewModel model)
         {
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var user = await _accountService.FindUserByIdAsync(User.Identity.GetUserId());
             if (user == null) return null;
 
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.BirthDate = model.BirthDate;
+            _mapper.Map(model, user);
 
-            var result = await UserManager.UpdateAsync(user);
+            var result = await _accountService.UpdateUserAsync(user);
 
-            if (!result.Succeeded) return GetErrorResult(result);
-
-            return Ok();
+            return !result.Succeeded ? GetErrorResult(result) : Ok();
         }
 
         // POST api/Account/ChangePassword
@@ -120,12 +91,13 @@ namespace Auth.Controllers.Api
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
+            var result =
+                await _accountService.ChangeUserPasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+                    model.NewPassword);
 
             if (!result.Succeeded) return GetErrorResult(result);
 
-            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            _accountService.Logout(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
 
@@ -134,39 +106,13 @@ namespace Auth.Controllers.Api
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
-            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            _accountService.Logout(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
-        }
-
-        /// <summary>
-        ///     OK PROBLEM JEST TAKI, ŻE NIE DZIAŁA XD.
-        ///     W APLIKACJI MOBILNEJ TRZEBA PODLINKOWAĆ PO PROSTU BUTTON LUB ODNOŚNIK DO /Account/ForgotPassword i tyle.
-        ///     Albo bawić się w robienie tego po API i przekierowywanie na widoki, ale wtedy token do zmiany hasła się nie zgadza
-        ///     bo UserManagery są niezależne
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("ForgotPassword")]
-        public IHttpActionResult ForgotPassword()
-        {
-            var homeUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority);
-            return Redirect($"{homeUrl}/Account/ForgotPassword");
         }
 
         #endregion
 
         #region Helpers
-
-        private async Task<string> SendEmailConfirmationTokenAsync(string userID, string subject)
-        {
-            var code = await UserManager.GenerateEmailConfirmationTokenAsync(userID);
-            var callbackUrl = new Url(Url.Link("ConfirmEmail", new {userId = userID, code}));
-            await UserManager.SendEmailAsync(userID, subject,
-                "Potwierdź swoje konto, klikając <a href=\"" + callbackUrl.Value + "\">tutaj</a>");
-            return callbackUrl.ToString();
-        }
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
         {
@@ -182,17 +128,6 @@ namespace Auth.Controllers.Api
                 return BadRequest();
 
             return BadRequest(ModelState);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _userManager != null)
-            {
-                _userManager.Dispose();
-                _userManager = null;
-            }
-
-            base.Dispose(disposing);
         }
 
         #endregion

@@ -230,7 +230,7 @@ namespace Auth.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Logout()
         {
-            _accountService.Logout();
+            _accountService.Logout(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Login", "Account");
         }
 

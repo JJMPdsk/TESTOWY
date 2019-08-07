@@ -12,6 +12,7 @@ namespace Auth.Services.Interfaces
 
         Task<ApplicationUser> FindUserByNameAsync(string name);
         Task<ApplicationUser> FindUserByEmailAsync(string email);
+        Task<ApplicationUser> FindUserByIdAsync(string userId);
 
         Task<IdentityResult> Register(ApplicationUser user, string password);
         Task<IdentityResult> ConfirmUserEmail(string userId, string code);
@@ -20,6 +21,6 @@ namespace Auth.Services.Interfaces
         Task<IdentityResult> ResetUserPasswordAsync(string userId, string code, string password);
 
         Task SendPasswordResetEmailConfirmationLinkAsync(string userId);
-        void Logout();
+        void Logout(string authType);
     }
 }
