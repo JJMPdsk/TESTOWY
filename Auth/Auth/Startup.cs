@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using Auth;
 using Auth.Models;
-using Autofac;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
@@ -15,6 +14,7 @@ namespace Auth
     public partial class Startup
     {
         public static IDataProtectionProvider DataProtectionProvider { get; private set; }
+
         public void Configuration(IAppBuilder app)
         {
             DataProtectionProvider = app.GetDataProtectionProvider();

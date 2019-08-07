@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Auth.Models;
+﻿using Auth.Models;
 using Auth.ViewModels.Account;
 using AutoMapper;
 

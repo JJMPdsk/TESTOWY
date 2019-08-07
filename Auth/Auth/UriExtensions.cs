@@ -6,7 +6,7 @@ namespace Auth
     public static class UriExtensions
     {
         /// <summary>
-        /// Adds the specified parameter to the Query String.
+        ///     Adds the specified parameter to the Query String.
         /// </summary>
         /// <param name="url"></param>
         /// <param name="paramName">Name of the parameter to add.</param>

@@ -1,5 +1,4 @@
 ﻿using Auth.Models;
-using Auth.Repository.Interfaces;
 
 namespace Auth.UnitOfWork
 {

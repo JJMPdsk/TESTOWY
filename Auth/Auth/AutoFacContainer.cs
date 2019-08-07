@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
@@ -26,9 +25,7 @@ namespace Auth
 {
     public static class AutoFacContainer
     {
-        private static IContainer _container;
-
-        public static IContainer Container => _container;
+        public static IContainer Container { get; private set; }
 
         public static void Register(ContainerBuilder containerBuilder)
         {
@@ -54,8 +51,8 @@ namespace Auth
 
             containerBuilder.RegisterType<EmailService>().As<IIdentityMessageService>().InstancePerRequest();
             containerBuilder.RegisterType<ApplicationUserManager>().InstancePerRequest();
-            containerBuilder.Register<IDataProtectionProvider>(c => Startup.DataProtectionProvider).InstancePerRequest();
-            
+            containerBuilder.Register(c => Startup.DataProtectionProvider).InstancePerRequest();
+
 
             containerBuilder.Register(c => new UserStore<ApplicationUser>(c.Resolve<ApplicationDbContext>()))
                 .AsImplementedInterfaces().InstancePerRequest();
@@ -70,7 +67,6 @@ namespace Auth
             containerBuilder.RegisterType<UserStore<ApplicationUser>>().AsImplementedInterfaces().InstancePerRequest();
 
 
-
             RegisterRepositories(containerBuilder);
             RegisterServices(containerBuilder);
             RegisterMaps(containerBuilder);
@@ -79,11 +75,10 @@ namespace Auth
             containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
 
+            Container = containerBuilder.Build();
 
-            _container = containerBuilder.Build();
-
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
-            _container.BeginLifetimeScope();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(Container));
+            Container.BeginLifetimeScope();
         }
 
         private static void RegisterServices(ContainerBuilder containerBuilder)
@@ -94,13 +89,13 @@ namespace Auth
         private static void RegisterRepositories(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
-           // containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
+            // containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>();
 
             //containerBuilder.Register(ctx => ctx.Resolve<UnitOfWork.UnitOfWork>()).As<IUnitOfWork>();
         }
 
         /// <summary>
-        /// Registers the AutoMapper profile from the external assemblies.
+        ///     Registers the AutoMapper profile from the external assemblies.
         /// </summary>
         /// <param name="containerBuilder">The containerBuilder.</param>
         private static void RegisterMaps(ContainerBuilder containerBuilder)
@@ -108,14 +103,11 @@ namespace Auth
             var profiles =
                 from t in typeof(AutoMapperProfile).Assembly.GetTypes()
                 where typeof(Profile).IsAssignableFrom(t)
-                select (Profile)Activator.CreateInstance(t);
+                select (Profile) Activator.CreateInstance(t);
 
             containerBuilder.Register(ctx => new MapperConfiguration(cfg =>
             {
-                foreach (var profile in profiles)
-                {
-                    cfg.AddProfile(profile);
-                }
+                foreach (var profile in profiles) cfg.AddProfile(profile);
             }));
 
             containerBuilder.Register(ctx => ctx.Resolve<MapperConfiguration>().CreateMapper()).As<IMapper>();
