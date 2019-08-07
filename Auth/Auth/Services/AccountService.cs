@@ -81,12 +81,24 @@ namespace Auth.Services
             return true;
         }
 
+        public async Task<bool> IsUserEmailConfirmedAsync(string userId)
+        {
+            return await _userManager.IsEmailConfirmedAsync(userId);
+        }
+
 
         public async Task<ApplicationUser> FindByNameAsync(string name)
         {
             var user = await _userManager.FindByNameAsync(name);
             return user;
         }
+
+        public async Task<ApplicationUser> FindByEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user;
+        }
+
 
         public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
         {
@@ -101,8 +113,26 @@ namespace Auth.Services
             return result;
         }
 
+        public async Task SendPasswordResetEmailConfirmationLinkAsync(string userId)
+        {
+            var code = await _userManager.GeneratePasswordResetTokenAsync(userId);
+            var callbackUrl = new Uri(Constants.Home + "/Account/ResetPassword")
+                .AddParameter("userId", userId)
+                .AddParameter("code", code).ToString();
+            await _userManager.SendEmailAsync(userId, "Reset hasła",
+                "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+        }
 
+        public async Task<IdentityResult> ResetUserPasswordAsync(string userId, string code, string password)
+        {
+            var result = await _userManager.ResetPasswordAsync(userId, code, password);
+            return result;
+        }
 
+        public void Logout()
+        {
+            _authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        }
         #endregion
 
 

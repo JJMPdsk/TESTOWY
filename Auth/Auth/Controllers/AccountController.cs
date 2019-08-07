@@ -158,92 +158,90 @@ namespace Auth.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult ForgotPassword()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        //{
-        //    if (!ModelState.IsValid) return View(model);
-        //    var user = await _userManager.FindByEmailAsync(model.Email);
-        //    if (user == null || !await _userManager.IsEmailConfirmedAsync(user.Id))
-        //        // Don't reveal that the user does not exist or is not confirmed
-        //        return View("ForgotPasswordConfirmation");
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            var user = await _accountService.FindByEmailAsync(model.Email);
 
-        //    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-        //    // Send an email with this link
-        //    var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
-        //    var callbackUrl = Url.Action("ResetPassword", "Account", new {userId = user.Id, code}, Request.Url.Scheme);
-        //    await _userManager.SendEmailAsync(user.Id, "Reset hasła",
-        //        "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
-        //    return RedirectToAction("ForgotPasswordConfirmation", "Account");
+            if (user == null || !await _accountService.IsUserEmailConfirmedAsync(user.Id))
+                // Don't reveal that the user does not exist or is not confirmed
+                return View("ForgotPasswordConfirmation");
 
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+            // Send an email with this link
+            await _accountService.SendPasswordResetEmailConfirmationLinkAsync(user.Id);
+            return RedirectToAction("ForgotPasswordConfirmation", "Account");
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult ForgotPasswordConfirmation()
-        //{
-        //    return View();
-        //}
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult ResetPassword(string code)
-        //{
-        //    return code == null ? View("Error") : View();
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
-        //{
-        //    if (!ModelState.IsValid) return View(model);
-        //    var user = await _userManager.FindByNameAsync(model.UserName);
-        //    if (user == null)
-        //        // Don't reveal that the user does not exist
-        //        return RedirectToAction("ResetPasswordConfirmation", "Account");
-        //    var result = await _userManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-        //    if (result.Succeeded) return RedirectToAction("ResetPasswordConfirmation", "Account");
-        //    AddErrors(result);
-        //    return View();
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ResetPassword(string code)
+        {
+            return code == null ? View("Error") : View();
+        }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public ActionResult ResetPasswordConfirmation()
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            var user = await _accountService.FindByNameAsync(model.UserName);
+            if (user == null)
+                // Don't reveal that the user does not exist
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            var result = await _accountService.ResetUserPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded) return RedirectToAction("ResetPasswordConfirmation", "Account");
+            AddErrors(result);
+            return View();
+        }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Logout()
-        //{
-        //    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-        //    return RedirectToAction("Login", "Account");
-        //}
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
 
-        ///// <summary>
-        ///// Do testowania roli usera
-        ///// GET: /Account
-        ///// </summary>
-        ///// <returns></returns>
-        //[HttpGet]
-        //[Authorize(Roles = "User")]
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Logout()
+        {
+            _accountService.Logout();
+            return RedirectToAction("Login", "Account");
+        }
+
+        /// <summary>
+        /// Do testowania roli usera
+        /// GET: /Account
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "User")]
+        public ActionResult Index()
+        {
+            return View();
+        }
 
         #endregion
     }
