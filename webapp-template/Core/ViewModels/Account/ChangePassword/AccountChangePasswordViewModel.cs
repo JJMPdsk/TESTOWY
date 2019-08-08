@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Core.ViewModels.Account
+namespace Core.ViewModels.Account.ChangePassword
 {
-    public class ChangePasswordViewModel
+    public class AccountChangePasswordViewModel
     {
         [Required]
         [DataType(DataType.Password)]

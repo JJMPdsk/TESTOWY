@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Core.ViewModels.Account
+namespace Core.ViewModels.Account.ResetPassword
 {
-    public class RegisterViewModel
+    public class AccountResetPasswordViewModel
     {
         [Required] [Display(Name = "Login")] public string UserName { get; set; }
 
@@ -18,18 +17,6 @@ namespace Core.ViewModels.Account
         [Compare("Password", ErrorMessage = "Podane hasła nie są takie same.")]
         public string ConfirmPassword { get; set; }
 
-        [Display(Name = "Email")] public string Email { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        [Display(Name = "Imię")]
-        public string FirstName { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        [Display(Name = "Nazwisko")]
-        public string LastName { get; set; }
-
-        [Display(Name = "Data urodzenia")] public DateTime? BirthDate { get; set; }
+        public string Code { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Core.ViewModels.Account;
+using Core.ViewModels.Account.EditProfile;
+using Core.ViewModels.Account.Register;
 using Data.Models;
 
 namespace Core.Infrastructure
@@ -8,7 +10,7 @@ namespace Core.Infrastructure
     {
         public AutoMapperProfile()
         {
-            CreateMap<RegisterViewModel, ApplicationUser>()
+            CreateMap<AccountRegisterViewModel, ApplicationUser>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.EmailConfirmed, opt => opt.Ignore())
                 .ForMember(x => x.PasswordHash, opt => opt.Ignore())
@@ -19,10 +21,10 @@ namespace Core.Infrastructure
                 .ForMember(x => x.LockoutEndDateUtc, opt => opt.Ignore())
                 .ForMember(x => x.LockoutEnabled, opt => opt.Ignore())
                 .ForMember(x => x.AccessFailedCount, opt => opt.Ignore());
-            CreateMap<ApplicationUser, RegisterViewModel>();
+            CreateMap<ApplicationUser, AccountRegisterViewModel>();
 
-            CreateMap<ApplicationUser, EditProfileViewModel>();
-            CreateMap<EditProfileViewModel, ApplicationUser>();
+            CreateMap<ApplicationUser, AccountEditProfileViewModel>();
+            CreateMap<AccountEditProfileViewModel, ApplicationUser>();
         }
     }
 }

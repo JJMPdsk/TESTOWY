@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Core.ViewModels.Account
+namespace Core.ViewModels.Account.ForgotPassword
 {
-    public class ForgotPasswordViewModel
+    public class AccountForgotPasswordViewModel
     {
         [Required]
         [EmailAddress]

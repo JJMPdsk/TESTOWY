@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Core.ViewModels.Account
+namespace Core.ViewModels.Account.Login
 {
-    public class LoginViewModel
+    public class AccountLoginViewModel
     {
         [Required] [Display(Name = "Login")] public string UserName { get; set; }
 

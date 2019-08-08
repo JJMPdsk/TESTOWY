@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Core.Services.Interfaces;
 using Core.Utilities;
 using Core.ViewModels.Account;
+using Core.ViewModels.Account.Login;
 using Data.Models;
 using Data.UnitOfWork;
 using Microsoft.AspNet.Identity;
@@ -12,16 +13,14 @@ using Constants = Core.Utilities.Constants;
 
 namespace Core.Services
 {
+    /// <summary>
+    /// Serwis obsługujący zarządzanie użytkownikiem
+    /// </summary>
     public class AccountService : IAccountService, IDisposable
     {
-        private readonly IAuthenticationManager _authenticationManager;
         private readonly IUnitOfWork _unitOfWork;
-
-
+        private readonly IAuthenticationManager _authenticationManager;
         private readonly ApplicationUserManager _userManager;
-
-
-        // prawdopodobnie do wyrzucenia
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; }
 
         #region Constructors
@@ -74,7 +73,7 @@ namespace Core.Services
             return result.Succeeded ? IdentityResult.Success : result;
         }
 
-        public async Task<bool> Login(LoginViewModel model)
+        public async Task<bool> Login(AccountLoginViewModel model)
         {
             var user = await _userManager.FindAsync(model.UserName, model.Password);
             if (user == null) return false;
@@ -89,9 +88,9 @@ namespace Core.Services
         }
 
 
-        public async Task<ApplicationUser> FindUserByNameAsync(string name)
+        public async Task<ApplicationUser> FindUserByUserNameAsync(string userName)
         {
-            var user = await _userManager.FindByNameAsync(name);
+            var user = await _userManager.FindByNameAsync(userName);
             return user;
         }
 

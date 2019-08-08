@@ -267,16 +267,16 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Utilities\UriExtensions.cs" />
-    <Compile Include="ViewModels\Account\EditProfileViewModel.cs" />
-    <Compile Include="ViewModels\Account\LoginViewModel.cs" />
+    <Compile Include="ViewModels\Account\EditProfile\AccountEditProfileViewModel.cs" />
+    <Compile Include="ViewModels\Account\Login\AccountLoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\Account\ChangePasswordViewModel.cs" />
-    <Compile Include="ViewModels\Account\ForgotPasswordViewModel.cs" />
-    <Compile Include="ViewModels\Account\RegisterViewModel.cs" />
-    <Compile Include="ViewModels\Account\ResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Account\ChangePassword\AccountChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\Account\ForgotPassword\AccountForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Account\Register\AccountRegisterViewModel.cs" />
+    <Compile Include="ViewModels\Account\ResetPassword\AccountResetPasswordViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -509,7 +509,6 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\EditProfile.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -520,6 +519,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Services\Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

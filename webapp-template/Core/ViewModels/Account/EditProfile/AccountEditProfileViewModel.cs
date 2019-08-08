@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.ViewModels.Account
+namespace Core.ViewModels.Account.EditProfile
 {
-    public class EditProfileViewModel
+    public class AccountEditProfileViewModel
     {
         [Required]
         [StringLength(255)]
