@@ -1,0 +1,57 @@
+﻿@model Core.ViewModels.Account.EditProfileViewModel
+@{
+    ViewBag.Title = "Edycja profilu";
+}
+
+<h2>Edycja profilu</h2>
+
+@using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+{
+    @Html.AntiForgeryToken()
+    <h4>Zmień szczegóły dotyczące Twojego konta</h4>
+    <hr/>
+    @Html.ValidationSummary("", new {@class = "text-danger"})
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName, new {@class = "col-md-2 control-label"})
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FirstName, new {@class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName, new {@class = "col-md-2 control-label"})
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.LastName, new {@class = "form-control"})
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.BirthDate, new {@class = "col-md-2 control-label"})
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.BirthDate, "{0:dd\\/MM\\/yyyy}", new {@class = "form-control datepicker"})
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-0 col-md-offset-2 col-xs-1">
+            <input type="submit" class="btn btn-primary" value="Zapisz"/>
+        </div>
+        <div class="col-xs-offset-6 col-sm-offset-4 col-md-offset-3 col-lg-offset-2 col-xs-2">
+            @Html.ActionLink("Zmiana hasła", "ChangePassword", null, new {@class = "btn btn-default"})
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/locales/bootstrap-datepicker.pl.min.js" charset="UTF-8"></script>
+}
+
+
+<script type="text/javascript">
+    $(function() {
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            language: 'pl',
+            startDate: '01/01/1890'
+        });
+    });
+</script>
