@@ -1,6 +1,6 @@
-﻿using Auth.Models;
+﻿using Data.Models;
 
-namespace Auth.UnitOfWork
+namespace Data.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

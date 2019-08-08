@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Auth.UnitOfWork
+namespace Data.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {

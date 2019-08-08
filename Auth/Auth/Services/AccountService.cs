@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Auth.Models;
+using Data.Models;
 using Auth.Services.Interfaces;
-using Auth.UnitOfWork;
+using Data.UnitOfWork;
 using Auth.ViewModels.Account;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;

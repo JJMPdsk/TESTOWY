@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
-using Auth.Models;
+using Data.Models;
 using Auth.Services.Interfaces;
 using Auth.ViewModels.Account;
 using AutoMapper;
@@ -184,9 +184,6 @@ namespace Auth.Controllers
             // Send an email with this link
             await _accountService.SendPasswordResetEmailConfirmationLinkAsync(user.Id);
             return RedirectToAction("ForgotPasswordConfirmation", "Account");
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
         }
 
         [HttpGet]

@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
-using Auth.Models;
+using Data.Models;
 using Exceptions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;

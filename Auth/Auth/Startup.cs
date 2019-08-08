@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using Auth;
-using Auth.Models;
+using Data.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;

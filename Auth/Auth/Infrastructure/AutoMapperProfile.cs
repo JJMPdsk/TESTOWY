@@ -1,6 +1,6 @@
-﻿using Auth.Models;
-using Auth.ViewModels.Account;
+﻿using Auth.ViewModels.Account;
 using AutoMapper;
+using Data.Models;
 
 namespace Auth.Infrastructure
 {

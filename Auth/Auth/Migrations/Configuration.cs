@@ -1,5 +1,5 @@
 using System.Data.Entity.Migrations;
-using Auth.Models;
+using Data.Models;
 
 namespace Auth.Migrations
 {

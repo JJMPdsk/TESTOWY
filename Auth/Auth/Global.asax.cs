@@ -12,8 +12,6 @@ namespace Auth
         protected void Application_Start()
         {
             AutoFacContainer.Register(new ContainerBuilder());
-
-
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

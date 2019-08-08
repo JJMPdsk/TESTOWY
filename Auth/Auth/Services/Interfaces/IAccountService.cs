@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Auth.Models;
+using Data.Models;
 using Auth.ViewModels.Account;
 using Microsoft.AspNet.Identity;
 
@@ -7,6 +7,9 @@ namespace Auth.Services.Interfaces
 {
     public interface IAccountService
     {
+        Task SendPasswordResetEmailConfirmationLinkAsync(string userId);
+        void Logout(string authType);
+
         Task<bool> Login(LoginViewModel model);
         Task<bool> IsUserEmailConfirmedAsync(string userId);
 
@@ -19,8 +22,5 @@ namespace Auth.Services.Interfaces
         Task<IdentityResult> UpdateUserAsync(ApplicationUser user);
         Task<IdentityResult> ChangeUserPasswordAsync(string userId, string oldPassword, string newPassword);
         Task<IdentityResult> ResetUserPasswordAsync(string userId, string code, string password);
-
-        Task SendPasswordResetEmailConfirmationLinkAsync(string userId);
-        void Logout(string authType);
     }
 }

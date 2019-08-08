@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Auth.Repository.Interfaces
+namespace Data.Repositories.Interfaces
 {
     public interface IRepository<TEntity> where TEntity : class
     {

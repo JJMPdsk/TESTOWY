@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using Auth.Repository.Interfaces;
+using Data.Repositories.Interfaces;
 
-namespace Auth.Repository
+namespace Data.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {

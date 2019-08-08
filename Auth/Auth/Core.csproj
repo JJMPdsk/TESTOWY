@@ -287,17 +287,11 @@
       <DependentUpon>201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\RoleName.cs" />
-    <Compile Include="Repository\Interfaces\IRepository.cs" />
     <Compile Include="Services\AccountService.cs" />
-    <Compile Include="UnitOfWork\IUnitOfWork.cs" />
-    <Compile Include="Repository\Repository.cs" />
-    <Compile Include="UnitOfWork\UnitOfWork.cs" />
     <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="UriExtensions.cs" />
     <Compile Include="ViewModels\Account\EditProfileViewModel.cs" />
     <Compile Include="ViewModels\Account\LoginViewModel.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -589,6 +583,12 @@
     <EmbeddedResource Include="Migrations\201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.resx">
       <DependentUpon>201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{38f9bf9f-e38b-4370-baf6-405dad01e8ce}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

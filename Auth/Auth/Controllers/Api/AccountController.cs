@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Auth.Models;
+using Data.Models;
 using Auth.Services.Interfaces;
 using Auth.ViewModels.Account;
 using AutoMapper;

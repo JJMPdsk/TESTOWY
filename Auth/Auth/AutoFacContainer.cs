@@ -6,12 +6,12 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using Auth.Infrastructure;
-using Auth.Models;
-using Auth.Repository;
-using Auth.Repository.Interfaces;
+using Data.Models;
+using Data.Repositories;
+using Data.Repositories.Interfaces;
 using Auth.Services;
 using Auth.Services.Interfaces;
-using Auth.UnitOfWork;
+using Data.UnitOfWork;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
@@ -31,7 +31,7 @@ namespace Auth
         public static void Register(ContainerBuilder containerBuilder)
         {
             RegisterDatabase(containerBuilder);
-            containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+            containerBuilder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             RegisterIdentity(containerBuilder);
             RegisterRepositories(containerBuilder);
             RegisterServices(containerBuilder);
