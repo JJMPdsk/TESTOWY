@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using Auth.Controllers.Api;
 using Auth.Infrastructure;
 using Auth.Models;
 using Auth.Repository;
@@ -31,21 +30,40 @@ namespace Auth
 
         public static void Register(ContainerBuilder containerBuilder)
         {
+            RegisterDatabase(containerBuilder);
+            containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+            RegisterIdentity(containerBuilder);
+            RegisterRepositories(containerBuilder);
+            RegisterServices(containerBuilder);
+            RegisterMaps(containerBuilder);
+            RegisterControllers(containerBuilder);
+
+            Container = containerBuilder.Build();
+            SetResolvers();
+            Container.BeginLifetimeScope();
+        }
+
+        private static void SetResolvers()
+        {
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(Container));
+        }
+
+        private static void RegisterDatabase(ContainerBuilder containerBuilder)
+        {
             containerBuilder.RegisterType<ApplicationDbContext>().As<DbContext>();
             containerBuilder.RegisterType<ApplicationDbContext>().InstancePerRequest();
-            containerBuilder.RegisterType<UnitOfWork.UnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
+        }
 
-            var config = new HttpConfiguration();
-
-            containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-
-            // ASP.NET identity
-
+        /// <summary>
+        ///     Rejestracja ASP.NET Identity
+        /// </summary>
+        /// <param name="containerBuilder"></param>
+        private static void RegisterIdentity(ContainerBuilder containerBuilder)
+        {
             containerBuilder.RegisterType<EmailService>().As<IIdentityMessageService>().InstancePerRequest();
             containerBuilder.RegisterType<ApplicationUserManager>().InstancePerRequest();
             containerBuilder.Register(c => Startup.DataProtectionProvider).InstancePerRequest();
-
-
             containerBuilder.Register(c => new UserStore<ApplicationUser>(c.Resolve<ApplicationDbContext>()))
                 .AsImplementedInterfaces().InstancePerRequest();
             containerBuilder.Register(c => HttpContext.Current.GetOwinContext().Authentication)
@@ -54,41 +72,40 @@ namespace Auth
             {
                 DataProtectionProvider = new DpapiDataProtectionProvider("ASP.NET Identity")
             });
-
-
             containerBuilder.RegisterType<UserStore<ApplicationUser>>().AsImplementedInterfaces().InstancePerRequest();
-
-
-            RegisterRepositories(containerBuilder);
-            RegisterServices(containerBuilder);
-            RegisterMaps(containerBuilder);
-
-            containerBuilder.RegisterControllers(Assembly.GetExecutingAssembly());
-
-
-            Container = containerBuilder.Build();
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
-
-            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(Container);
-
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(Container));
-            Container.BeginLifetimeScope();
         }
 
+        private static void RegisterControllers(ContainerBuilder containerBuilder)
+        {
+            // Web API
+            containerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
+            // MVC 5
+            containerBuilder.RegisterControllers(Assembly.GetExecutingAssembly());
+        }
+
+        /// <summary>
+        ///     Rejestrowanie serwisów
+        /// </summary>
+        /// <param name="containerBuilder"></param>
         private static void RegisterServices(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterType<AccountService>().As<IAccountService>();
         }
 
+        /// <summary>
+        ///     Rejestrowanie repozytoriów
+        /// </summary>
+        /// <param name="containerBuilder"></param>
         private static void RegisterRepositories(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
         }
 
         /// <summary>
-        ///     Registers the AutoMapper profile from the external assemblies.
+        ///     Rejestruje profile Automappera
         /// </summary>
-        /// <param name="containerBuilder">The containerBuilder.</param>
+        /// <param name="containerBuilder"></param>
         private static void RegisterMaps(ContainerBuilder containerBuilder)
         {
             var profiles =
