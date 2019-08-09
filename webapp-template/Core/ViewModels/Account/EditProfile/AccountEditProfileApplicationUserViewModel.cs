@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.ViewModels.Account.EditProfile
 {
-    public class AccountEditProfileViewModel
+    public class AccountEditProfileApplicationUserViewModel
     {
         [Required]
         [StringLength(255)]

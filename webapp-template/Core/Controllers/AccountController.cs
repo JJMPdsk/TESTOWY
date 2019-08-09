@@ -92,11 +92,11 @@ namespace Core.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(AccountRegisterViewModel model)
+        public async Task<ActionResult> Register(AccountRegisterApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = _mapper.Map<AccountRegisterViewModel, ApplicationUser>(model);
+            var user = _mapper.Map<AccountRegisterApplicationUserViewModel, ApplicationUser>(model);
 
             var result = await _accountService.Register(user, model.Password);
 
@@ -134,7 +134,7 @@ namespace Core.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(AccountLoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(AccountLoginApplicationUserViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -157,7 +157,7 @@ namespace Core.Controllers
         public async Task<ActionResult> EditProfile()
         {
             var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
-            var model = _mapper.Map<ApplicationUser, AccountEditProfileViewModel>(user);
+            var model = _mapper.Map<ApplicationUser, AccountEditProfileApplicationUserViewModel>(user);
             return View(model);
         }
 
@@ -168,7 +168,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditProfile(AccountEditProfileViewModel model)
+        public async Task<ActionResult> EditProfile(AccountEditProfileApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
             var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
@@ -203,7 +203,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(AccountChangePasswordViewModel model)
+        public async Task<ActionResult> ChangePassword(AccountChangePasswordApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
             var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
@@ -267,7 +267,7 @@ namespace Core.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(AccountForgotPasswordViewModel model)
+        public async Task<ActionResult> ForgotPassword(AccountForgotPasswordApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
             var user = await _accountService.FindUserByEmailAsync(model.Email);
@@ -318,7 +318,7 @@ namespace Core.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(AccountResetPasswordViewModel model)
+        public async Task<ActionResult> ResetPassword(AccountResetPasswordApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
             var user = await _accountService.FindUserByUserNameAsync(model.UserName);

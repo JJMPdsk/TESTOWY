@@ -2,7 +2,7 @@
 
 namespace Core.ViewModels.Account.ForgotPassword
 {
-    public class AccountForgotPasswordViewModel
+    public class AccountForgotPasswordApplicationUserViewModel
     {
         [Required]
         [EmailAddress]

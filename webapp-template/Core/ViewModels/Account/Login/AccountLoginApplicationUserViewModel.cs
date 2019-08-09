@@ -2,7 +2,7 @@
 
 namespace Core.ViewModels.Account.Login
 {
-    public class AccountLoginViewModel
+    public class AccountLoginApplicationUserViewModel
     {
         [Required] [Display(Name = "Login")] public string UserName { get; set; }
 

@@ -74,11 +74,11 @@ namespace Core.Controllers.Api
         [HttpPost]
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(AccountRegisterViewModel model)
+        public async Task<IHttpActionResult> Register(AccountRegisterApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = _mapper.Map<AccountRegisterViewModel, ApplicationUser>(model);
+            var user = _mapper.Map<AccountRegisterApplicationUserViewModel, ApplicationUser>(model);
 
             var result = await _accountService.Register(user, model.Password);
 
@@ -121,7 +121,7 @@ namespace Core.Controllers.Api
         /// <returns></returns>
         [HttpPost]
         [Route("EditProfile")]
-        public async Task<IHttpActionResult> EditProfile(AccountEditProfileViewModel model)
+        public async Task<IHttpActionResult> EditProfile(AccountEditProfileApplicationUserViewModel model)
         {
             var user = await _accountService.FindUserByIdAsync(User.Identity.GetUserId());
             if (user == null) return null;
@@ -141,7 +141,7 @@ namespace Core.Controllers.Api
         /// <returns></returns>
         [HttpPost]
         [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(AccountChangePasswordViewModel model)
+        public async Task<IHttpActionResult> ChangePassword(AccountChangePasswordApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

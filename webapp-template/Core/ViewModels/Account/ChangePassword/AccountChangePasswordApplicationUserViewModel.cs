@@ -2,7 +2,7 @@
 
 namespace Core.ViewModels.Account.ChangePassword
 {
-    public class AccountChangePasswordViewModel
+    public class AccountChangePasswordApplicationUserViewModel
     {
         [Required]
         [DataType(DataType.Password)]

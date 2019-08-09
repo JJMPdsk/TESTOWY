@@ -34,7 +34,7 @@ namespace Core.Services.Interfaces
         /// </summary>
         /// <param name="model"></param>
         /// <returns>Zwraca informacje o powiedzeniu się logowania</returns>
-        Task<bool> Login(AccountLoginViewModel model);
+        Task<bool> Login(AccountLoginApplicationUserViewModel model);
         /// <summary>
         /// Metoda sprawdzająca czy użytkownik potwierdził adres e-mail
         /// </summary>

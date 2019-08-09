@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.ViewModels.Account.Register
 {
-    public class AccountRegisterViewModel
+    public class AccountRegisterApplicationUserViewModel
     {
         [Required] [Display(Name = "Login")] public string UserName { get; set; }
 

@@ -10,7 +10,7 @@ namespace Core.Infrastructure
     {
         public AutoMapperProfile()
         {
-            CreateMap<AccountRegisterViewModel, ApplicationUser>()
+            CreateMap<AccountRegisterApplicationUserViewModel, ApplicationUser>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.EmailConfirmed, opt => opt.Ignore())
                 .ForMember(x => x.PasswordHash, opt => opt.Ignore())
@@ -21,10 +21,10 @@ namespace Core.Infrastructure
                 .ForMember(x => x.LockoutEndDateUtc, opt => opt.Ignore())
                 .ForMember(x => x.LockoutEnabled, opt => opt.Ignore())
                 .ForMember(x => x.AccessFailedCount, opt => opt.Ignore());
-            CreateMap<ApplicationUser, AccountRegisterViewModel>();
+            CreateMap<ApplicationUser, AccountRegisterApplicationUserViewModel>();
 
-            CreateMap<ApplicationUser, AccountEditProfileViewModel>();
-            CreateMap<AccountEditProfileViewModel, ApplicationUser>();
+            CreateMap<ApplicationUser, AccountEditProfileApplicationUserViewModel>();
+            CreateMap<AccountEditProfileApplicationUserViewModel, ApplicationUser>();
         }
     }
 }

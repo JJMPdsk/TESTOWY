@@ -73,7 +73,7 @@ namespace Core.Services
             return result.Succeeded ? IdentityResult.Success : result;
         }
 
-        public async Task<bool> Login(AccountLoginViewModel model)
+        public async Task<bool> Login(AccountLoginApplicationUserViewModel model)
         {
             var user = await _userManager.FindAsync(model.UserName, model.Password);
             if (user == null) return false;

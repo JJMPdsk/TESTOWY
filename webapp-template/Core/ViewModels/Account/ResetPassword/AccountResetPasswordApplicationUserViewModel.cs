@@ -2,7 +2,7 @@
 
 namespace Core.ViewModels.Account.ResetPassword
 {
-    public class AccountResetPasswordViewModel
+    public class AccountResetPasswordApplicationUserViewModel
     {
         [Required] [Display(Name = "Login")] public string UserName { get; set; }
 
