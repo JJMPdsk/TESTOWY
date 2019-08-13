@@ -36,7 +36,7 @@ namespace Core.Services.Interfaces
         /// </summary>
         /// <param name="model"></param>
         /// <returns>Zwraca informacje o powiedzeniu się logowania</returns>
-        Task<bool> Login(AccountLoginApplicationUserViewModel model);
+        Task<bool> LoginAsync(AccountLoginApplicationUserViewModel model);
 
         /// <summary>
         /// Metoda sprawdzająca czy użytkownik potwierdził adres e-mail
@@ -72,7 +72,7 @@ namespace Core.Services.Interfaces
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        Task<IdentityResult> Register(ApplicationUser user, string password);
+        Task<IdentityResult> RegisterAsync(ApplicationUser user, string password);
 
         /// <summary>
         /// Metoda do potwierdzania adresu e-mail użytkownika
@@ -80,7 +80,7 @@ namespace Core.Services.Interfaces
         /// <param name="userId"></param>
         /// <param name="code"></param>
         /// <returns></returns>
-        Task<IdentityResult> ConfirmUserEmail(string userId, string code);
+        Task<IdentityResult> ConfirmUserEmailAsync(string userId, string code);
 
         /// <summary>
         /// Metoda do aktualizowania informacji o użytkowniku

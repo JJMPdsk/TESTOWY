@@ -2,7 +2,6 @@
 using System.Web.Http;
 using AutoMapper;
 using Core.Services.Interfaces;
-using Core.ViewModels.Account;
 using Core.ViewModels.Account.ChangePassword;
 using Core.ViewModels.Account.EditProfile;
 using Core.ViewModels.Account.Register;
@@ -23,8 +22,6 @@ namespace Core.Controllers.Api
     {
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-
-        #region Helpers
 
         /// <summary>
         /// Metoda pomocnicza do zwracania pełniejszych informacji o błędzie
@@ -47,10 +44,6 @@ namespace Core.Controllers.Api
             return BadRequest(ModelState);
         }
 
-        #endregion
-
-        #region Constructors
-
         public AccountController()
         {
         }
@@ -60,10 +53,6 @@ namespace Core.Controllers.Api
             _accountService = accountService;
             _mapper = mapper;
         }
-
-        #endregion
-
-        #region REST API
 
         /// <summary>
         /// POST api/Account/Register
@@ -80,7 +69,7 @@ namespace Core.Controllers.Api
 
             var user = _mapper.Map<AccountRegisterApplicationUserViewModel, ApplicationUser>(model);
 
-            var result = await _accountService.Register(user, model.Password);
+            var result = await _accountService.RegisterAsync(user, model.Password);
 
             return !result.Succeeded ? GetErrorResult(result) : Ok();
         }
@@ -103,7 +92,7 @@ namespace Core.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var result = await _accountService.ConfirmUserEmail(userId, code);
+            var result = await _accountService.ConfirmUserEmailAsync(userId, code);
 
             // Jeśli potwierdzenie adresu email się powiedzie, to przekieruj użytkownika pod wskazany adres
             // (użytkownik potwierdza email klikając link na swojej skrzynce mailowej, więc można go przekierować też na inną stronę)
@@ -167,7 +156,5 @@ namespace Core.Controllers.Api
             _accountService.Logout(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
         }
-
-        #endregion
     }
 }

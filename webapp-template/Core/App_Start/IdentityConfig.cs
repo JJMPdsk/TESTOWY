@@ -10,14 +10,12 @@ using Data.Models;
 using Exceptions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security.DataProtection;
 using SendGrid;
 
 namespace Core
 {
     // Configure the application user manager used in this application.
     // r is defined in ASP.NET Identity and is used by the application.
-
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
         public ApplicationUserManager(IUserStore<ApplicationUser> store, IIdentityMessageService emailService,
@@ -48,19 +46,58 @@ namespace Core
                         TokenLifespan = TimeSpan.FromHours(3)
                     };
         }
-
-        public static IDataProtectionProvider DataProtectionProvider { get; private set; }
     }
 
     public class EmailService : IIdentityMessageService
     {
-        public async Task SendAsync(IdentityMessage message)
+        public Task SendAsync(IdentityMessage message)
         {
-            await ConfigSendGridasync(message);
+            return ConfigSendGridAsync(message);
         }
 
         // Use NuGet to install SendGrid (Basic C# client lib) 
-        private async Task ConfigSendGridasync(IdentityMessage message)
+        private static Task ConfigSendGridAsync(IdentityMessage message)
+        {
+            var myMessage = ConfigureMessage(message);
+
+            var credentials = new NetworkCredential(
+                ConfigurationManager.AppSettings["mailAccount"],
+                ConfigurationManager.AppSettings["mailPassword"]
+            );
+
+            // Create a Web transport for sending email.
+            var transportWeb = new Web(credentials);
+            // Send the email.
+            return SendEmailAsync(transportWeb, myMessage);
+        }
+
+        private static async Task SendEmailAsync(ITransport transportWeb, ISendGrid myMessage)
+        {
+            if (transportWeb != null)
+            {
+                try
+                {
+                    await transportWeb.DeliverAsync(myMessage);
+                }
+                catch (InvalidApiRequestException exception)
+                {
+                    var details = new StringBuilder();
+
+                    details.Append("ResponseStatusCode: " + exception.ResponseStatusCode + ".   ");
+                    for (var i = 0; i < exception.Errors.Count(); i++)
+                        details.Append(" -- Error #" + i + " : " + exception.Errors[i]);
+
+                    throw new ApplicationException(details.ToString(), exception);
+                }
+            }
+            else
+            {
+                Trace.TraceError("Failed to create Web transport.");
+                await Task.FromResult(0);
+            }
+        }
+
+        private static SendGridMessage ConfigureMessage(IdentityMessage message)
         {
             var myMessage = new SendGridMessage();
             myMessage.AddTo(message.Destination);
@@ -69,40 +106,7 @@ namespace Core
             myMessage.Subject = message.Subject;
             myMessage.Text = message.Body;
             myMessage.Html = message.Body;
-
-            var credentials = new NetworkCredential(
-                ConfigurationManager.AppSettings["mailAccount"],
-                ConfigurationManager.AppSettings["mailPassword"]
-            );
-
-            // Create a Web transport for sending email.
-            //var transportWeb = new Web("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", credentials, TimeSpan.FromSeconds(10));
-            // var transportWeb = new Web("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");
-            //var transportWeb = new Web("D1fQA_8fRrWxPSwvv3FVyQ");
-            var transportWeb = new Web(credentials);
-            // Send the email.
-            if (transportWeb != null)
-            {
-                try
-                {
-                    await transportWeb.DeliverAsync(myMessage);
-                }
-                catch (InvalidApiRequestException ex)
-                {
-                    var detalle = new StringBuilder();
-
-                    detalle.Append("ResponseStatusCode: " + ex.ResponseStatusCode + ".   ");
-                    for (var i = 0; i < ex.Errors.Count(); i++)
-                        detalle.Append(" -- Error #" + i + " : " + ex.Errors[i]);
-
-                    throw new ApplicationException(detalle.ToString(), ex);
-                }
-            }
-            else
-            {
-                Trace.TraceError("Failed to create Web transport.");
-                await Task.FromResult(0);
-            }
+            return myMessage;
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Core.Services.Interfaces;
 using Core.Utilities;
-using Core.ViewModels.Account;
 using Core.ViewModels.Account.Login;
 using Data.Models;
 using Data.UnitOfWork;
@@ -14,16 +13,17 @@ using Constants = Core.Utilities.Constants;
 namespace Core.Services
 {
     /// <summary>
-    /// Serwis obsługujący zarządzanie użytkownikiem
+    ///     Serwis obsługujący zarządzanie użytkownikiem
     /// </summary>
     public class AccountService : IAccountService, IDisposable
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IAuthenticationManager _authenticationManager;
-        private readonly ApplicationUserManager _userManager;
-        public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; }
 
-        #region Constructors
+        private readonly IAuthenticationManager _authenticationManager;
+
+        private readonly ApplicationUserManager _userManager;
+
+        public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; }
 
         public AccountService()
         {
@@ -47,11 +47,7 @@ namespace Core.Services
             AccessTokenFormat = accessTokenFormat;
         }
 
-        #endregion
-
-        #region Public methods
-
-        public async Task<IdentityResult> Register(ApplicationUser user, string password)
+        public async Task<IdentityResult> RegisterAsync(ApplicationUser user, string password)
         {
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded) return result;
@@ -66,14 +62,14 @@ namespace Core.Services
             return IdentityResult.Success;
         }
 
-        public async Task<IdentityResult> ConfirmUserEmail(string userId, string code)
+        public async Task<IdentityResult> ConfirmUserEmailAsync(string userId, string code)
         {
             var result = await _userManager.ConfirmEmailAsync(userId, code);
 
             return result.Succeeded ? IdentityResult.Success : result;
         }
 
-        public async Task<bool> Login(AccountLoginApplicationUserViewModel model)
+        public async Task<bool> LoginAsync(AccountLoginApplicationUserViewModel model)
         {
             var user = await _userManager.FindAsync(model.UserName, model.Password);
             if (user == null) return false;
@@ -86,7 +82,6 @@ namespace Core.Services
         {
             return await _userManager.IsEmailConfirmedAsync(userId);
         }
-
 
         public async Task<ApplicationUser> FindUserByUserNameAsync(string userName)
         {
@@ -105,7 +100,6 @@ namespace Core.Services
             var user = await _userManager.FindByIdAsync(userId);
             return user;
         }
-
 
         public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user)
         {
@@ -134,13 +128,12 @@ namespace Core.Services
                 await SendEmailConfirmationTokenAsync(userId, "Potwierdź swoje konto");
         }
 
-
         public async Task SendPasswordResetEmailConfirmationLinkAsync(string userId)
         {
             var code = await _userManager.GeneratePasswordResetTokenAsync(userId);
-            var callbackUrl = new Uri(Constants.Home + "/Account/ResetPassword")
-                .AddParameter("userId", userId)
-                .AddParameter("code", code).ToString();
+            var callbackUrl = new Uri(Constants.Home + "/Account/ResetPassword").AddParameter("userId", userId)
+                .AddParameter("code", code)
+                .ToString();
             await _userManager.SendEmailAsync(userId, "Reset hasła",
                 "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
         }
@@ -156,10 +149,11 @@ namespace Core.Services
             _authenticationManager.SignOut(authType);
         }
 
-        #endregion
-
-
-        #region Private methods
+        public void Dispose()
+        {
+            _unitOfWork?.Dispose();
+            _userManager?.Dispose();
+        }
 
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
@@ -171,21 +165,13 @@ namespace Core.Services
         private async Task<string> SendEmailConfirmationTokenAsync(string userId, string subject)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userId);
-            var callbackUrl = new Uri(Constants.Home + "/Account/ConfirmEmail")
-                .AddParameter("userId", userId)
-                .AddParameter("code", code).ToString();
+            var callbackUrl = new Uri(Constants.Home + "/Account/ConfirmEmail").AddParameter("userId", userId)
+                .AddParameter("code", code)
+                .ToString();
             await _userManager.SendEmailAsync(userId, subject,
                 "Potwierdź swoje konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
 
             return callbackUrl;
         }
-
-        public void Dispose()
-        {
-            _unitOfWork?.Dispose();
-            _userManager?.Dispose();
-        }
-
-        #endregion
     }
 }

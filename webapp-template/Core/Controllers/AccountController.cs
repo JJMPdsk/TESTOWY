@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using AutoMapper;
 using Core.Services.Interfaces;
-using Core.ViewModels.Account;
 using Core.ViewModels.Account.ChangePassword;
 using Core.ViewModels.Account.EditProfile;
 using Core.ViewModels.Account.ForgotPassword;
@@ -14,24 +13,22 @@ using Microsoft.AspNet.Identity;
 
 namespace Core.Controllers
 {
-
     /// <summary>
-    /// Kontroler MVC do zarządzania kontem użytkownika.
-    /// Dostęp autoryzowany chyba, że akcja stanowi inaczej.
+    ///     Kontroler MVC do zarządzania kontem użytkownika.
+    ///     Dostęp autoryzowany chyba, że akcja stanowi inaczej.
     /// </summary>
     [Authorize]
     public class AccountController : Controller
     {
         /// <summary>
-        /// Serwis do kontrolera zawierający logikę biznesową.
+        ///     Serwis do kontrolera zawierający logikę biznesową.
         /// </summary>
         private readonly IAccountService _accountService;
+
         /// <summary>
-        /// AutoMapper do mapowania DOM <---> ViewModel
+        ///     AutoMapper do mapowania DOM <---> ViewModel
         /// </summary>
         private readonly IMapper _mapper;
-
-        #region Constructors
 
         public AccountController()
         {
@@ -43,38 +40,8 @@ namespace Core.Controllers
             _mapper = mapper;
         }
 
-        #endregion
-
-
-        #region Helpers
-
         /// <summary>
-        /// Pomocnicza metoda dodająca do ModelState błędy, które następnie będą renderowane w widoku.
-        /// </summary>
-        /// <param name="result"></param>
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors) ModelState.AddModelError("", error);
-        }
-
-        /// <summary>
-        /// Metoda pomonicza przenosząca użytkownika do strony głównej.
-        /// </summary>
-        /// <param name="returnUrl"></param>
-        /// <returns></returns>
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
-            return RedirectToAction("Index", "Home");
-        }
-
-        #endregion
-
-
-        #region Actions
-
-        /// <summary>
-        /// Zwraca widok do rejestracji.
+        ///     Zwraca widok do rejestracji.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -85,7 +52,7 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Metoda do rejestracji - przyjmuje ViewModel, mapuje go na użytkownika, którego następnie rejestruje.
+        ///     Metoda do rejestracji - przyjmuje ViewModel, mapuje go na użytkownika, którego następnie rejestruje.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -98,7 +65,7 @@ namespace Core.Controllers
 
             var user = _mapper.Map<AccountRegisterApplicationUserViewModel, ApplicationUser>(model);
 
-            var result = await _accountService.Register(user, model.Password);
+            var result = await _accountService.RegisterAsync(user, model.Password);
 
             if (result.Succeeded) return RedirectToAction("Index", "Home");
 
@@ -109,11 +76,13 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Zwraca widok do logowania.
+        ///     Zwraca widok do logowania.
         /// </summary>
-        /// <param name="returnUrl">Url, z którego zostaliśmy przekierowani do metody
-        /// (np. gdy niezalogowani chcemy dostać się do autoryzowanego widoku - jesteśmy
-        /// kierowani do ekranu logowania).</param>
+        /// <param name="returnUrl">
+        ///     Url, z którego zostaliśmy przekierowani do metody
+        ///     (np. gdy niezalogowani chcemy dostać się do autoryzowanego widoku - jesteśmy
+        ///     kierowani do ekranu logowania).
+        /// </param>
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
@@ -124,12 +93,14 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Loguje użytkownika.
+        ///     Loguje użytkownika.
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="returnUrl">Url, z którego zostaliśmy przekierowani do metody
-        /// /// (np. gdy niezalogowani chcemy dostać się do autoryzowanego widoku - jesteśmy
-        /// /// kierowani do ekranu logowania).</param>
+        /// <param name="returnUrl">
+        ///     Url, z którego zostaliśmy przekierowani do metody
+        ///     /// (np. gdy niezalogowani chcemy dostać się do autoryzowanego widoku - jesteśmy
+        ///     /// kierowani do ekranu logowania).
+        /// </param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
@@ -138,7 +109,7 @@ namespace Core.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var loginSucceeded = await _accountService.Login(model);
+            var loginSucceeded = await _accountService.LoginAsync(model);
 
             // Jeśli pomyślnie zalogowano, wracamy do miejsca, z którego zostaliśmy wysłani do ekranu logowania
             if (loginSucceeded) return RedirectToLocal(returnUrl);
@@ -149,8 +120,8 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Bierze obecnie zalogowanego użytkownika i wypełnia jego danymi formularz
-        /// do edycji danych, który następnie zwraca do użytkownika.
+        ///     Bierze obecnie zalogowanego użytkownika i wypełnia jego danymi formularz
+        ///     do edycji danych, który następnie zwraca do użytkownika.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -162,7 +133,7 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Wysyła polecenie edycji profilu użytkownika i nadpisanie edytowanych pól użytkownika (np. imię).
+        ///     Wysyła polecenie edycji profilu użytkownika i nadpisanie edytowanych pól użytkownika (np. imię).
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -186,7 +157,7 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Zwraca formularz do zmiany hasła.
+        ///     Zwraca formularz do zmiany hasła.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -196,8 +167,8 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Wysyła polecenie serwisowi aby ten zmienił hasło dla obecnie zalogowanego użytkownika.
-        /// Użytkownik po zmianie hasła jest wylogowywany i proszony o ponowne zalogowanie z użyciem nowego hasła.
+        ///     Wysyła polecenie serwisowi aby ten zmienił hasło dla obecnie zalogowanego użytkownika.
+        ///     Użytkownik po zmianie hasła jest wylogowywany i proszony o ponowne zalogowanie z użyciem nowego hasła.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -208,8 +179,7 @@ namespace Core.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
             var result = await _accountService.ChangeUserPasswordAsync(user.Id, model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
-                return RedirectToAction("Login", "Account");
+            if (result.Succeeded) return RedirectToAction("Login", "Account");
 
             AddErrors(result);
 
@@ -217,7 +187,7 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Widok wyświetlany po kliknięciu w link aktywacyjny użytkownika, który zarejestrował się przez API.
+        ///     Widok wyświetlany po kliknięciu w link aktywacyjny użytkownika, który zarejestrował się przez API.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -228,9 +198,9 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Widok wyświetlany po kliknięciu w link aktywacyjny użytkownika,
-        /// który zarejestrował się przez MVC,
-        /// pod warunkiem, że potwierdzenie adresu email się powiodło.
+        ///     Widok wyświetlany po kliknięciu w link aktywacyjny użytkownika,
+        ///     który zarejestrował się przez MVC,
+        ///     pod warunkiem, że potwierdzenie adresu email się powiodło.
         /// </summary>
         /// <param name="userId">id użytkownika</param>
         /// <param name="code">token do weryfikacji</param>
@@ -239,15 +209,14 @@ namespace Core.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null)
-                return View("Error");
-            var result = await _accountService.ConfirmUserEmail(userId, code);
+            if (userId == null || code == null) return View("Error");
+            var result = await _accountService.ConfirmUserEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
         /// <summary>
-        /// Widok dla przypomnienia hasła, w którym użytkownik wprowadza adres email,
-        /// na który ma zostać wysłany link do resetowania hasła.
+        ///     Widok dla przypomnienia hasła, w którym użytkownik wprowadza adres email,
+        ///     na który ma zostać wysłany link do resetowania hasła.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -258,9 +227,9 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Wysyła polecenie, by sprawdzić czy użytkownik potwierdził email.
-        /// Jeśli potwierdził, to wysyła na adres email link do zresetowania hasła.
-        /// Jeśli nie potwierdził, to wysyłany jest nowy link aktywacyjny na email.
+        ///     Wysyła polecenie, by sprawdzić czy użytkownik potwierdził email.
+        ///     Jeśli potwierdził, to wysyła na adres email link do zresetowania hasła.
+        ///     Jeśli nie potwierdził, to wysyłany jest nowy link aktywacyjny na email.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -276,7 +245,7 @@ namespace Core.Controllers
                 // Nie pokazuj, że użytkownika nie ma w bazie
                 return View("ForgotPasswordConfirmation");
 
-            bool isUserEmailConfirmed = await _accountService.IsUserEmailConfirmedAsync(user.Id);
+            var isUserEmailConfirmed = await _accountService.IsUserEmailConfirmedAsync(user.Id);
 
             // W zależności od stanu potwierdzenia adresu użytkownika wyśle link aktywujący konto lub link do resetu hasła
             await _accountService.ForgotPasswordAsync(user.Id);
@@ -287,8 +256,8 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Widok potwierdzający zmianę hasła - informuje
-        /// użytkownika, by udał się na swoją skrzynkę mailową
+        ///     Widok potwierdzający zmianę hasła - informuje
+        ///     użytkownika, by udał się na swoją skrzynkę mailową
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -299,7 +268,7 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Zwraca widok do resetowania hasła.
+        ///     Zwraca widok do resetowania hasła.
         /// </summary>
         /// <param name="code">token</param>
         /// <returns></returns>
@@ -311,7 +280,7 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Resetuje hasło użytkownika i ustawia nowe zadane przez użytkownika.
+        ///     Resetuje hasło użytkownika i ustawia nowe zadane przez użytkownika.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -332,7 +301,7 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Widok potwierdzający zresetowanie hasła.
+        ///     Widok potwierdzający zresetowanie hasła.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -343,7 +312,7 @@ namespace Core.Controllers
         }
 
         /// <summary>
-        /// Wylogowuje użytkownika i przenosi go na ekran logowania.
+        ///     Wylogowuje użytkownika i przenosi go na ekran logowania.
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -354,6 +323,24 @@ namespace Core.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        #endregion
+        /// <summary>
+        ///     Pomocnicza metoda dodająca do ModelState błędy, które następnie będą renderowane w widoku.
+        /// </summary>
+        /// <param name="result"></param>
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors) ModelState.AddModelError("", error);
+        }
+
+        /// <summary>
+        ///     Metoda pomonicza przenosząca użytkownika do strony głównej.
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
