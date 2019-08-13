@@ -1,7 +1,11 @@
-﻿namespace Core.Utilities
+﻿using System.Net;
+using System.Web;
+using Core.Controllers;
+
+namespace Core.Utilities
 {
     public static class Constants
     {
-        public const string Home = "https://localhost:44378";
+        public static readonly string Home = $"https://{HttpContext.Current.Request.Url.Authority}";
     }
 }
