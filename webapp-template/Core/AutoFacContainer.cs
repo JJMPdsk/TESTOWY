@@ -12,6 +12,7 @@ using AutoMapper;
 using Core.Infrastructure;
 using Core.Services;
 using Core.Services.Interfaces;
+using Core.Utilities;
 using Data.Models;
 using Data.Repositories;
 using Data.Repositories.Interfaces;

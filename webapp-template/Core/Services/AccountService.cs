@@ -25,10 +25,6 @@ namespace Core.Services
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; }
 
-        public AccountService()
-        {
-        }
-
         public AccountService(IUnitOfWork unitOfWork, IAuthenticationManager authenticationManager,
             ApplicationUserManager userManager)
         {

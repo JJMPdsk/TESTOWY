@@ -6,5 +6,6 @@ namespace Data.UnitOfWork
     {
         // przykład: IDayRepository Days { get; }
         int Complete();
+
     }
 }

@@ -44,10 +44,6 @@ namespace Core.Controllers.Api
             return BadRequest(ModelState);
         }
 
-        public AccountController()
-        {
-        }
-
         public AccountController(IAccountService accountService, IMapper mapper)
         {
             _accountService = accountService;

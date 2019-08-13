@@ -30,10 +30,6 @@ namespace Core.Controllers
         /// </summary>
         private readonly IMapper _mapper;
 
-        public AccountController()
-        {
-        }
-
         public AccountController(IAccountService accountService, IMapper mapper)
         {
             _accountService = accountService;
