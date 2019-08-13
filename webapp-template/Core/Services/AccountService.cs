@@ -22,9 +22,7 @@ namespace Core.Services
         private readonly IAuthenticationManager _authenticationManager;
 
         private readonly ApplicationUserManager _userManager;
-
-        public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; }
-
+        
         public AccountService(IUnitOfWork unitOfWork, IAuthenticationManager authenticationManager,
             ApplicationUserManager userManager)
         {
@@ -32,17 +30,7 @@ namespace Core.Services
             _authenticationManager = authenticationManager;
             _userManager = userManager;
         }
-
-        // prawdopodobnie do wyrzucenia
-        public AccountService(IUnitOfWork unitOfWork, ApplicationUserManager userManager,
-            ISecureDataFormat<AuthenticationTicket> accessTokenFormat, IAuthenticationManager authenticationManager)
-        {
-            _unitOfWork = unitOfWork;
-            _userManager = userManager;
-            _authenticationManager = authenticationManager;
-            AccessTokenFormat = accessTokenFormat;
-        }
-
+        
         public async Task<IdentityResult> RegisterAsync(ApplicationUser user, string password)
         {
             var result = await _userManager.CreateAsync(user, password);
