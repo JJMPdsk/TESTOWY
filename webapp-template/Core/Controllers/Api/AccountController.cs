@@ -84,7 +84,7 @@ namespace Core.Controllers.Api
         {
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
             {
-                ModelState.AddModelError("", "userId i code są wymagane");
+                ModelState.AddModelError("", "Wystąpił błąd");
                 return BadRequest(ModelState);
             }
 
