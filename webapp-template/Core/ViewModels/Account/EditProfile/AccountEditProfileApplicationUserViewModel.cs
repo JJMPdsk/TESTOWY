@@ -15,6 +15,7 @@ namespace Core.ViewModels.Account.EditProfile
         [Display(Name = "Nazwisko")]
         public string LastName { get; set; }
 
-        [Display(Name = "Data urodzenia")] public DateTime? BirthDate { get; set; }
+        [Display(Name = "Data urodzenia")]
+        public DateTime? BirthDate { get; set; }
     }
 }
