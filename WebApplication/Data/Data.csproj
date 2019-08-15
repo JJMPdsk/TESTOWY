@@ -104,6 +104,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201907241243355_InitialCreate.cs" />
+    <Compile Include="Migrations\201907241243355_InitialCreate.Designer.cs">
+      <DependentUpon>201907241243355_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs" />
+    <Compile Include="Migrations\201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.Designer.cs">
+      <DependentUpon>201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\RoleName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,6 +125,14 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201907241243355_InitialCreate.resx">
+      <DependentUpon>201907241243355_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.resx">
+      <DependentUpon>201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
