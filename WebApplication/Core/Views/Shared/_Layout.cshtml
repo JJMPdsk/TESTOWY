@@ -9,47 +9,7 @@
     @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            @Html.ActionLink("Nazwa aplikacji", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Home", "Index", "Home", new {area = ""}, null)</li>
-                <li>@Html.ActionLink("API", "Index", "Help", new {area = ""}, null)</li>
-            </ul>
-            @if (Request.IsAuthenticated)
-            {
-                using (Html.BeginForm("Logout", "Account", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
-                {
-                    @Html.AntiForgeryToken()
-
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            @Html.ActionLink("Witaj " + User.Identity.Name + "!", "EditProfile", "Account", null, new {title = "Edycja profilu"})
-                        </li>
-                        <li>
-                            <a href="javascript:document.getElementById('logoutForm').submit()">Wyloguj się</a>
-                        </li>
-                    </ul>
-                }
-            }
-            else
-            {
-                <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Rejestracja", "Register", "Account", null, new {id = "registerLink"})</li>
-                    <li>@Html.ActionLink("Logowanie", "Login", "Account", null, new {id = "loginLink"})</li>
-                </ul>
-            }
-        </div>
-    </div>
-</div>
+@Html.Partial("_NavBar")
 <div class="container body-content">
     @RenderBody()
     <hr/>
