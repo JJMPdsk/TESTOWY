@@ -256,15 +256,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\AutoMapperProfile.cs" />
-    <Compile Include="Migrations\201907241243355_InitialCreate.cs" />
-    <Compile Include="Migrations\201907241243355_InitialCreate.Designer.cs">
-      <DependentUpon>201907241243355_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs" />
-    <Compile Include="Migrations\201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.Designer.cs">
-      <DependentUpon>201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Utilities\UriExtensions.cs" />
@@ -400,6 +391,7 @@
     <Content Include="Content\bootstrap-datepicker.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker.css.map" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -550,14 +542,6 @@
   <ItemGroup>
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201907241243355_InitialCreate.resx">
-      <DependentUpon>201907241243355_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.resx">
-      <DependentUpon>201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj">
