@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Core;
+using Data;
 using Data.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
