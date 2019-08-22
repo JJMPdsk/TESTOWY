@@ -6,71 +6,50 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
-using Exceptions;
 using Microsoft.AspNet.Identity;
-using SendGrid;
 
 namespace Core.Utilities
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
-            return ConfigSendGridAsync(message);
+            await ConfigSendGridAsync(message);
         }
 
         // Use NuGet to install SendGrid (Basic C# client lib) 
-        private static Task ConfigSendGridAsync(IdentityMessage message)
+        private static async Task ConfigSendGridAsync(IdentityMessage message)
         {
-            var myMessage = ConfigureMessage(message);
-
             var credentials = new NetworkCredential(
                 ConfigurationManager.AppSettings["mailAccount"],
                 ConfigurationManager.AppSettings["mailPassword"]
             );
 
-            // Create a Web transport for sending email.
-            var transportWeb = new Web(credentials);
             // Send the email.
-            return SendEmailAsync(transportWeb, myMessage);
+            await SendEmailAsync(credentials, message);
         }
 
-        private static async Task SendEmailAsync(ITransport transportWeb, ISendGrid myMessage)
+        private static async Task SendEmailAsync(NetworkCredential credentials, IdentityMessage message)
         {
-            if (transportWeb != null)
+            try
             {
-                try
-                {
-                    await transportWeb.DeliverAsync(myMessage);
-                }
-                catch (InvalidApiRequestException exception)
-                {
-                    var details = new StringBuilder();
+                MailMessage mail = new MailMessage("szymon.pitula@codeteam.pl", message.Destination);
+                SmtpClient client = new SmtpClient("smtp-u9hna.vipserv.org");
 
-                    details.Append("ResponseStatusCode: " + exception.ResponseStatusCode + ".   ");
-                    for (var i = 0; i < exception.Errors.Count(); i++)
-                        details.Append(" -- Error #" + i + " : " + exception.Errors[i]);
+                mail.Subject = message.Subject;
+                mail.Body = message.Body;
+                mail.BodyEncoding = Encoding.UTF8;
 
-                    throw new ApplicationException(details.ToString(), exception);
-                }
+                client.Port = 587;
+                client.UseDefaultCredentials = false;
+                client.EnableSsl = false;
+                client.Credentials = credentials;
+                client.Send(mail);
             }
-            else
+            catch (Exception e)
             {
-                Trace.TraceError("Failed to create Web transport.");
-                await Task.FromResult(0);
-            }
-        }
-
-        private static SendGridMessage ConfigureMessage(IdentityMessage message)
-        {
-            var myMessage = new SendGridMessage();
-            myMessage.AddTo(message.Destination);
-            myMessage.From = new MailAddress(
-                "szymon.pitula@codeteam.pl", "Szymon Pituła");
-            myMessage.Subject = message.Subject;
-            myMessage.Text = message.Body;
-            myMessage.Html = message.Body;
-            return myMessage;
+                // ignored
+            } 
         }
     }
 }
