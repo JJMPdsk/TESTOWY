@@ -34,7 +34,7 @@ namespace Core
                 UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"))
                     {
-                        TokenLifespan = TimeSpan.FromHours(3)
+                        TokenLifespan = TimeSpan.FromHours(24)
                     };
         }
     }

@@ -260,6 +260,7 @@
     <Compile Include="Services\Interfaces\IAccountService.cs" />
     <Compile Include="Utilities\UriExtensions.cs" />
     <Compile Include="ViewModels\Account\EditProfile\AccountEditProfileApplicationUserViewModel.cs" />
+    <Compile Include="ViewModels\Account\GetUserDetails\AccountGetUserDetailsApplicationUserViewModel.cs" />
     <Compile Include="ViewModels\Account\Login\AccountLoginApplicationUserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
