@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.ViewModels.Account;
 using Core.ViewModels.Account.EditProfile;
+using Core.ViewModels.Account.GetUserDetails;
 using Core.ViewModels.Account.Register;
 using Data.Models;
 
@@ -15,6 +16,9 @@ namespace Core.Infrastructure
 
             CreateMap<ApplicationUser, AccountEditProfileApplicationUserViewModel>();
             CreateMap<AccountEditProfileApplicationUserViewModel, ApplicationUser>();
+
+            CreateMap<ApplicationUser, AccountGetUserDetailsApplicationUserViewModel>();
+            CreateMap<AccountGetUserDetailsApplicationUserViewModel, ApplicationUser>();
         }
     }
 }

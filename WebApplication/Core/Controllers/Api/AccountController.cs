@@ -6,6 +6,7 @@ using Core.ViewModels.Account.ChangePassword;
 using Core.ViewModels.Account.EditProfile;
 using Core.ViewModels.Account.Register;
 using Data.Models;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security.Cookies;
 using Constants = Core.Utilities.Constants;
@@ -138,6 +139,19 @@ namespace Core.Controllers.Api
 
             _accountService.Logout(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("GetUserDetails")]
+        public async Task<IHttpActionResult> GetUserDetails(string userName)
+        {
+            if (userName.IsNullOrWhiteSpace()) return BadRequest("Nazwa użytkownika nie może być pusta");
+
+            var user = await _accountService.FindUserByUserNameAsync(userName);
+            if (user == null) return BadRequest("Użytkownik o takiej nazwien nie istnieje");
+
+            var model = user;
+            return Ok(model);
         }
 
         /// <summary>
