@@ -4,6 +4,7 @@ using AutoMapper;
 using Core.Services.Interfaces;
 using Core.ViewModels.Account.ChangePassword;
 using Core.ViewModels.Account.EditProfile;
+using Core.ViewModels.Account.GetUserDetails;
 using Core.ViewModels.Account.Register;
 using Data.Models;
 using Microsoft.Ajax.Utilities;
@@ -150,7 +151,7 @@ namespace Core.Controllers.Api
             var user = await _accountService.FindUserByUserNameAsync(userName);
             if (user == null) return BadRequest("Użytkownik o takiej nazwien nie istnieje");
 
-            var model = user;
+            var model = _mapper.Map<ApplicationUser, AccountGetUserDetailsApplicationUserViewModel>(user);
             return Ok(model);
         }
 
