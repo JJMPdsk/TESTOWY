@@ -1,4 +1,5 @@
-﻿using Data.Models;
+﻿using System.Threading.Tasks;
+using Data.Models;
 
 namespace Data.UnitOfWork
 {
@@ -18,6 +19,11 @@ namespace Data.UnitOfWork
         public int Complete()
         {
             return _context.SaveChanges();
+        }
+        
+        public async Task<int> CompleteAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
 
 

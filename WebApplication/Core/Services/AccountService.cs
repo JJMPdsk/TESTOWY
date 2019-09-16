@@ -15,7 +15,7 @@ namespace Core.Services
     /// <summary>
     ///     Serwis obsługujący zarządzanie użytkownikiem
     /// </summary>
-    public class AccountService : IAccountService, IDisposable
+    public class AccountService : Service, IAccountService, IDisposable
     {
         private readonly IUnitOfWork _unitOfWork;
 

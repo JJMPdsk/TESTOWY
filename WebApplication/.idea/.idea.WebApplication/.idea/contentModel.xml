@@ -1,0 +1,446 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Szymon\.Rider2019.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Szymon\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_WebApplication.1195279207.00" t="ExcludeRecursive" />
+    <e p="D:\Programowanie\CodeTeam\webapp-template\webapp-template\WebApplication" t="IncludeFlat">
+      <e p="Core" t="IncludeRecursive">
+        <e p="App_Data" t="Include" />
+        <e p="App_Start" t="Include">
+          <e p="BundleConfig.cs" t="Include" />
+          <e p="FilterConfig.cs" t="Include" />
+          <e p="IdentityConfig.cs" t="Include" />
+          <e p="RouteConfig.cs" t="Include" />
+          <e p="Startup.Auth.cs" t="Include" />
+          <e p="WebApiConfig.cs" t="Include" />
+        </e>
+        <e p="Areas" t="Include">
+          <e p="HelpPage" t="Include">
+            <e p="ApiDescriptionExtensions.cs" t="Include" />
+            <e p="App_Start" t="Include">
+              <e p="HelpPageConfig.cs" t="Include" />
+            </e>
+            <e p="Controllers" t="Include">
+              <e p="HelpController.cs" t="Include" />
+            </e>
+            <e p="HelpPage.css" t="Include" />
+            <e p="HelpPageAreaRegistration.cs" t="Include" />
+            <e p="HelpPageConfigurationExtensions.cs" t="Include" />
+            <e p="ModelDescriptions" t="Include">
+              <e p="CollectionModelDescription.cs" t="Include" />
+              <e p="ComplexTypeModelDescription.cs" t="Include" />
+              <e p="DictionaryModelDescription.cs" t="Include" />
+              <e p="EnumTypeModelDescription.cs" t="Include" />
+              <e p="EnumValueDescription.cs" t="Include" />
+              <e p="IModelDocumentationProvider.cs" t="Include" />
+              <e p="KeyValuePairModelDescription.cs" t="Include" />
+              <e p="ModelDescription.cs" t="Include" />
+              <e p="ModelDescriptionGenerator.cs" t="Include" />
+              <e p="ModelNameAttribute.cs" t="Include" />
+              <e p="ModelNameHelper.cs" t="Include" />
+              <e p="ParameterAnnotation.cs" t="Include" />
+              <e p="ParameterDescription.cs" t="Include" />
+              <e p="SimpleTypeModelDescription.cs" t="Include" />
+            </e>
+            <e p="Models" t="Include">
+              <e p="HelpPageApiModel.cs" t="Include" />
+            </e>
+            <e p="SampleGeneration" t="Include">
+              <e p="HelpPageSampleGenerator.cs" t="Include" />
+              <e p="HelpPageSampleKey.cs" t="Include" />
+              <e p="ImageSample.cs" t="Include" />
+              <e p="InvalidSample.cs" t="Include" />
+              <e p="ObjectGenerator.cs" t="Include" />
+              <e p="SampleDirection.cs" t="Include" />
+              <e p="TextSample.cs" t="Include" />
+            </e>
+            <e p="Views" t="Include">
+              <e p="_ViewStart.cshtml" t="Include" />
+              <e p="Help" t="Include">
+                <e p="Api.cshtml" t="Include" />
+                <e p="DisplayTemplates" t="Include">
+                  <e p="ApiGroup.cshtml" t="Include" />
+                  <e p="CollectionModelDescription.cshtml" t="Include" />
+                  <e p="ComplexTypeModelDescription.cshtml" t="Include" />
+                  <e p="DictionaryModelDescription.cshtml" t="Include" />
+                  <e p="EnumTypeModelDescription.cshtml" t="Include" />
+                  <e p="HelpPageApiModel.cshtml" t="Include" />
+                  <e p="ImageSample.cshtml" t="Include" />
+                  <e p="InvalidSample.cshtml" t="Include" />
+                  <e p="KeyValuePairModelDescription.cshtml" t="Include" />
+                  <e p="ModelDescriptionLink.cshtml" t="Include" />
+                  <e p="Parameters.cshtml" t="Include" />
+                  <e p="Samples.cshtml" t="Include" />
+                  <e p="SimpleTypeModelDescription.cshtml" t="Include" />
+                  <e p="TextSample.cshtml" t="Include" />
+                </e>
+                <e p="Index.cshtml" t="Include" />
+                <e p="ResourceModel.cshtml" t="Include" />
+              </e>
+              <e p="Shared" t="Include">
+                <e p="_Layout.cshtml" t="Include" />
+              </e>
+              <e p="Web.config" t="Include" />
+            </e>
+            <e p="XmlDocumentationProvider.cs" t="Include" />
+          </e>
+        </e>
+        <e p="AutoFacContainer.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Content" t="Include">
+          <e p="bootstrap" t="Include">
+            <e p="alerts.less" t="Include" />
+            <e p="badges.less" t="Include" />
+            <e p="bootstrap.less" t="Include" />
+            <e p="breadcrumbs.less" t="Include" />
+            <e p="button-groups.less" t="Include" />
+            <e p="buttons.less" t="Include" />
+            <e p="carousel.less" t="Include" />
+            <e p="close.less" t="Include" />
+            <e p="code.less" t="Include" />
+            <e p="component-animations.less" t="Include" />
+            <e p="dropdowns.less" t="Include" />
+            <e p="forms.less" t="Include" />
+            <e p="glyphicons.less" t="Include" />
+            <e p="grid.less" t="Include" />
+            <e p="input-groups.less" t="Include" />
+            <e p="jumbotron.less" t="Include" />
+            <e p="labels.less" t="Include" />
+            <e p="list-group.less" t="Include" />
+            <e p="media.less" t="Include" />
+            <e p="mixins" t="Include">
+              <e p="alerts.less" t="Include" />
+              <e p="background-variant.less" t="Include" />
+              <e p="border-radius.less" t="Include" />
+              <e p="buttons.less" t="Include" />
+              <e p="center-block.less" t="Include" />
+              <e p="clearfix.less" t="Include" />
+              <e p="forms.less" t="Include" />
+              <e p="gradients.less" t="Include" />
+              <e p="grid-framework.less" t="Include" />
+              <e p="grid.less" t="Include" />
+              <e p="hide-text.less" t="Include" />
+              <e p="image.less" t="Include" />
+              <e p="labels.less" t="Include" />
+              <e p="list-group.less" t="Include" />
+              <e p="nav-divider.less" t="Include" />
+              <e p="nav-vertical-align.less" t="Include" />
+              <e p="opacity.less" t="Include" />
+              <e p="pagination.less" t="Include" />
+              <e p="panels.less" t="Include" />
+              <e p="progress-bar.less" t="Include" />
+              <e p="reset-filter.less" t="Include" />
+              <e p="reset-text.less" t="Include" />
+              <e p="resize.less" t="Include" />
+              <e p="responsive-visibility.less" t="Include" />
+              <e p="size.less" t="Include" />
+              <e p="tab-focus.less" t="Include" />
+              <e p="table-row.less" t="Include" />
+              <e p="text-emphasis.less" t="Include" />
+              <e p="text-overflow.less" t="Include" />
+              <e p="vendor-prefixes.less" t="Include" />
+            </e>
+            <e p="mixins.less" t="Include" />
+            <e p="modals.less" t="Include" />
+            <e p="navbar.less" t="Include" />
+            <e p="navs.less" t="Include" />
+            <e p="normalize.less" t="Include" />
+            <e p="pager.less" t="Include" />
+            <e p="pagination.less" t="Include" />
+            <e p="panels.less" t="Include" />
+            <e p="popovers.less" t="Include" />
+            <e p="print.less" t="Include" />
+            <e p="progress-bars.less" t="Include" />
+            <e p="responsive-embed.less" t="Include" />
+            <e p="responsive-utilities.less" t="Include" />
+            <e p="scaffolding.less" t="Include" />
+            <e p="tables.less" t="Include" />
+            <e p="theme.less" t="Include" />
+            <e p="thumbnails.less" t="Include" />
+            <e p="tooltip.less" t="Include" />
+            <e p="type.less" t="Include" />
+            <e p="utilities.less" t="Include" />
+            <e p="variables.less" t="Include" />
+            <e p="wells.less" t="Include" />
+          </e>
+          <e p="bootstrap-datepicker.css" t="Include" />
+          <e p="bootstrap-datepicker.css.map" t="Include" />
+          <e p="bootstrap-datepicker.min.css" t="Include" />
+          <e p="bootstrap-datepicker.standalone.css" t="Include" />
+          <e p="bootstrap-datepicker.standalone.css.map" t="Include" />
+          <e p="bootstrap-datepicker.standalone.min.css" t="Include" />
+          <e p="bootstrap-datepicker3.css" t="Include" />
+          <e p="bootstrap-datepicker3.css.map" t="Include" />
+          <e p="bootstrap-datepicker3.min.css" t="Include" />
+          <e p="bootstrap-datepicker3.standalone.css" t="Include" />
+          <e p="bootstrap-datepicker3.standalone.css.map" t="Include" />
+          <e p="bootstrap-datepicker3.standalone.min.css" t="Include" />
+          <e p="bootstrap-theme.css" t="Include" />
+          <e p="bootstrap-theme.css.map" t="Include" />
+          <e p="bootstrap-theme.min.css" t="Include" />
+          <e p="bootstrap-theme.min.css.map" t="Include" />
+          <e p="bootstrap.css" t="Include" />
+          <e p="bootstrap.css.map" t="Include" />
+          <e p="bootstrap.min.css" t="Include" />
+          <e p="bootstrap.min.css.map" t="Include" />
+          <e p="fonts" t="Include">
+            <e p="glyphicons-halflings-regular.eot" t="Include" />
+            <e p="glyphicons-halflings-regular.svg" t="Include" />
+            <e p="glyphicons-halflings-regular.ttf" t="Include" />
+            <e p="glyphicons-halflings-regular.woff" t="Include" />
+            <e p="glyphicons-halflings-regular.woff2" t="Include" />
+          </e>
+          <e p="getFormattedDate.js" t="Include" />
+          <e p="Site.css" t="Include" />
+        </e>
+        <e p="Controllers" t="Include">
+          <e p="AccountController.cs" t="Include" />
+          <e p="Api" t="Include">
+            <e p="AccountController.cs" t="Include" />
+          </e>
+          <e p="HomeController.cs" t="Include" />
+        </e>
+        <e p="Core.csproj" t="IncludeRecursive" />
+        <e p="favicon.ico" t="Include" />
+        <e p="fonts" t="Include">
+          <e p="glyphicons-halflings-regular.eot" t="Include" />
+          <e p="glyphicons-halflings-regular.svg" t="Include" />
+          <e p="glyphicons-halflings-regular.ttf" t="Include" />
+          <e p="glyphicons-halflings-regular.woff" t="Include" />
+          <e p="glyphicons-halflings-regular.woff2" t="Include" />
+        </e>
+        <e p="Global.asax" t="Include" />
+        <e p="Global.asax.cs" t="Include" />
+        <e p="Infrastructure" t="Include">
+          <e p="AutoMapperProfile.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="PublishProfiles" t="Include">
+            <e p="Default Settings.pubxml" t="Include" />
+            <e p="Default Settings1.pubxml" t="Include" />
+          </e>
+        </e>
+        <e p="Providers" t="Include">
+          <e p="ApplicationOAuthProvider.cs" t="Include" />
+        </e>
+        <e p="Results" t="Include">
+          <e p="ChallengeResult.cs" t="Include" />
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="bootstrap-datepicker.js" t="Include" />
+          <e p="bootstrap-datepicker.min.js" t="Include" />
+          <e p="bootstrap.js" t="Include" />
+          <e p="bootstrap.min.js" t="Include" />
+          <e p="jquery-1.8.0.intellisense.js" t="Include" />
+          <e p="jquery-1.8.0.js" t="Include" />
+          <e p="jquery-1.8.0.min.js" t="Include" />
+          <e p="jquery-3.3.1.intellisense.js" t="Include" />
+          <e p="jquery-3.3.1.js" t="Include" />
+          <e p="jquery-3.3.1.min.js" t="Include" />
+          <e p="jquery-3.3.1.min.map" t="Include" />
+          <e p="jquery-3.3.1.slim.js" t="Include" />
+          <e p="jquery-3.3.1.slim.min.js" t="Include" />
+          <e p="jquery-3.3.1.slim.min.map" t="Include" />
+          <e p="jquery.validate-vsdoc.js" t="Include" />
+          <e p="jquery.validate.js" t="Include" />
+          <e p="jquery.validate.min.js" t="Include" />
+          <e p="jquery.validate.unobtrusive.js" t="Include" />
+          <e p="jquery.validate.unobtrusive.min.js" t="Include" />
+          <e p="locales" t="Include">
+            <e p="bootstrap-datepicker-en-CA.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ar-tn.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ar.min.js" t="Include" />
+            <e p="bootstrap-datepicker.az.min.js" t="Include" />
+            <e p="bootstrap-datepicker.bg.min.js" t="Include" />
+            <e p="bootstrap-datepicker.bn.min.js" t="Include" />
+            <e p="bootstrap-datepicker.br.min.js" t="Include" />
+            <e p="bootstrap-datepicker.bs.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ca.min.js" t="Include" />
+            <e p="bootstrap-datepicker.cs.min.js" t="Include" />
+            <e p="bootstrap-datepicker.cy.min.js" t="Include" />
+            <e p="bootstrap-datepicker.da.min.js" t="Include" />
+            <e p="bootstrap-datepicker.de.min.js" t="Include" />
+            <e p="bootstrap-datepicker.el.min.js" t="Include" />
+            <e p="bootstrap-datepicker.en-AU.min.js" t="Include" />
+            <e p="bootstrap-datepicker.en-CA.min.js" t="Include" />
+            <e p="bootstrap-datepicker.en-GB.min.js" t="Include" />
+            <e p="bootstrap-datepicker.en-IE.min.js" t="Include" />
+            <e p="bootstrap-datepicker.en-NZ.min.js" t="Include" />
+            <e p="bootstrap-datepicker.en-ZA.min.js" t="Include" />
+            <e p="bootstrap-datepicker.eo.min.js" t="Include" />
+            <e p="bootstrap-datepicker.es.min.js" t="Include" />
+            <e p="bootstrap-datepicker.et.min.js" t="Include" />
+            <e p="bootstrap-datepicker.eu.min.js" t="Include" />
+            <e p="bootstrap-datepicker.fa.min.js" t="Include" />
+            <e p="bootstrap-datepicker.fi.min.js" t="Include" />
+            <e p="bootstrap-datepicker.fo.min.js" t="Include" />
+            <e p="bootstrap-datepicker.fr-CH.min.js" t="Include" />
+            <e p="bootstrap-datepicker.fr.min.js" t="Include" />
+            <e p="bootstrap-datepicker.gl.min.js" t="Include" />
+            <e p="bootstrap-datepicker.he.min.js" t="Include" />
+            <e p="bootstrap-datepicker.hi.min.js" t="Include" />
+            <e p="bootstrap-datepicker.hr.min.js" t="Include" />
+            <e p="bootstrap-datepicker.hu.min.js" t="Include" />
+            <e p="bootstrap-datepicker.hy.min.js" t="Include" />
+            <e p="bootstrap-datepicker.id.min.js" t="Include" />
+            <e p="bootstrap-datepicker.is.min.js" t="Include" />
+            <e p="bootstrap-datepicker.it-CH.min.js" t="Include" />
+            <e p="bootstrap-datepicker.it.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ja.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ka.min.js" t="Include" />
+            <e p="bootstrap-datepicker.kh.min.js" t="Include" />
+            <e p="bootstrap-datepicker.kk.min.js" t="Include" />
+            <e p="bootstrap-datepicker.km.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ko.min.js" t="Include" />
+            <e p="bootstrap-datepicker.kr.min.js" t="Include" />
+            <e p="bootstrap-datepicker.lt.min.js" t="Include" />
+            <e p="bootstrap-datepicker.lv.min.js" t="Include" />
+            <e p="bootstrap-datepicker.me.min.js" t="Include" />
+            <e p="bootstrap-datepicker.mk.min.js" t="Include" />
+            <e p="bootstrap-datepicker.mn.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ms.min.js" t="Include" />
+            <e p="bootstrap-datepicker.nl-BE.min.js" t="Include" />
+            <e p="bootstrap-datepicker.nl.min.js" t="Include" />
+            <e p="bootstrap-datepicker.no.min.js" t="Include" />
+            <e p="bootstrap-datepicker.oc.min.js" t="Include" />
+            <e p="bootstrap-datepicker.pl.min.js" t="Include" />
+            <e p="bootstrap-datepicker.pt-BR.min.js" t="Include" />
+            <e p="bootstrap-datepicker.pt.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ro.min.js" t="Include" />
+            <e p="bootstrap-datepicker.rs-latin.min.js" t="Include" />
+            <e p="bootstrap-datepicker.rs.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ru.min.js" t="Include" />
+            <e p="bootstrap-datepicker.si.min.js" t="Include" />
+            <e p="bootstrap-datepicker.sk.min.js" t="Include" />
+            <e p="bootstrap-datepicker.sl.min.js" t="Include" />
+            <e p="bootstrap-datepicker.sq.min.js" t="Include" />
+            <e p="bootstrap-datepicker.sr-latin.min.js" t="Include" />
+            <e p="bootstrap-datepicker.sr.min.js" t="Include" />
+            <e p="bootstrap-datepicker.sv.min.js" t="Include" />
+            <e p="bootstrap-datepicker.sw.min.js" t="Include" />
+            <e p="bootstrap-datepicker.ta.min.js" t="Include" />
+            <e p="bootstrap-datepicker.tg.min.js" t="Include" />
+            <e p="bootstrap-datepicker.th.min.js" t="Include" />
+            <e p="bootstrap-datepicker.tk.min.js" t="Include" />
+            <e p="bootstrap-datepicker.tr.min.js" t="Include" />
+            <e p="bootstrap-datepicker.uk.min.js" t="Include" />
+            <e p="bootstrap-datepicker.uz-cyrl.min.js" t="Include" />
+            <e p="bootstrap-datepicker.uz-latn.min.js" t="Include" />
+            <e p="bootstrap-datepicker.vi.min.js" t="Include" />
+            <e p="bootstrap-datepicker.zh-CN.min.js" t="Include" />
+            <e p="bootstrap-datepicker.zh-TW.min.js" t="Include" />
+          </e>
+        </e>
+        <e p="Services" t="Include">
+          <e p="AccountService.cs" t="Include" />
+          <e p="Interfaces" t="Include">
+            <e p="IAccountService.cs" t="Include" />
+            <e p="IService.cs" t="Include" />
+          </e>
+          <e p="Service.cs" t="Include" />
+          <e p="Utilities" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="Utilities" t="Include">
+          <e p="Constants.cs" t="Include" />
+          <e p="EmailService.cs" t="Include" />
+          <e p="UriExtensions.cs" t="Include" />
+        </e>
+        <e p="ViewModels" t="Include">
+          <e p="Account" t="Include">
+            <e p="ChangePassword" t="Include">
+              <e p="AccountChangePasswordApplicationUserViewModel.cs" t="Include" />
+            </e>
+            <e p="EditProfile" t="Include">
+              <e p="AccountEditProfileApplicationUserViewModel.cs" t="Include" />
+            </e>
+            <e p="ForgotPassword" t="Include">
+              <e p="AccountForgotPasswordApplicationUserViewModel.cs" t="Include" />
+            </e>
+            <e p="GetUserDetails" t="Include">
+              <e p="AccountGetUserDetailsApplicationUserViewModel.cs" t="Include" />
+            </e>
+            <e p="Login" t="Include">
+              <e p="AccountLoginApplicationUserViewModel.cs" t="Include" />
+            </e>
+            <e p="Register" t="Include">
+              <e p="AccountRegisterApplicationUserViewModel.cs" t="Include" />
+            </e>
+            <e p="ResetPassword" t="Include">
+              <e p="AccountResetPasswordApplicationUserViewModel.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Shared" t="Include" />
+        </e>
+        <e p="Views" t="Include">
+          <e p="_ViewStart.cshtml" t="Include" />
+          <e p="Account" t="Include">
+            <e p="ChangePassword.cshtml" t="Include" />
+            <e p="ConfirmEmail.cshtml" t="Include" />
+            <e p="ConfirmEmailApi.cshtml" t="Include" />
+            <e p="EditProfile.cshtml" t="Include" />
+            <e p="ForgotPassword.cshtml" t="Include" />
+            <e p="ForgotPasswordConfirmation.cshtml" t="Include" />
+            <e p="Login.cshtml" t="Include" />
+            <e p="PleaseConfirmEmail.cshtml" t="Include" />
+            <e p="Register.cshtml" t="Include" />
+            <e p="ResetPassword.cshtml" t="Include" />
+            <e p="ResetPasswordConfirmation.cshtml" t="Include" />
+          </e>
+          <e p="Home" t="Include">
+            <e p="Index.cshtml" t="Include" />
+          </e>
+          <e p="Shared" t="Include">
+            <e p="_Layout.cshtml" t="Include" />
+            <e p="_LoginPartial.cshtml" t="Include" />
+            <e p="_NavBar.cshtml" t="Include" />
+            <e p="Error.cshtml" t="Include" />
+          </e>
+          <e p="Web.config" t="Include" />
+        </e>
+        <e p="Web.config" t="Include" />
+        <e p="Web.Debug.config" t="Include" />
+        <e p="Web.Release.config" t="Include" />
+      </e>
+      <e p="Data" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="ApplicationDbContext.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Data.csproj" t="IncludeRecursive" />
+        <e p="Migrations" t="Include">
+          <e p="201907241243355_InitialCreate.cs" t="Include" />
+          <e p="201907241243355_InitialCreate.Designer.cs" t="Include" />
+          <e p="201907241243355_InitialCreate.resx" t="Include" />
+          <e p="201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.cs" t="Include" />
+          <e p="201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.Designer.cs" t="Include" />
+          <e p="201907300813305_AddFirstNameAndLastNameAndBirthDateToApplicationUser.resx" t="Include" />
+          <e p="Configuration.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="IdentityModels.cs" t="Include" />
+          <e p="RoleName.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Repositories" t="Include">
+          <e p="Interfaces" t="Include">
+            <e p="IRepository.cs" t="Include" />
+          </e>
+          <e p="Repository.cs" t="Include" />
+        </e>
+        <e p="UnitOfWork" t="Include">
+          <e p="IUnitOfWork.cs" t="Include" />
+          <e p="UnitOfWork.cs" t="Include" />
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="WebApplication.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>

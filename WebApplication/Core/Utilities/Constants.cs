@@ -4,6 +4,8 @@ namespace Core.Utilities
 {
     public static class Constants
     {
-        public static readonly string Home = $"http://{HttpContext.Current.Request.Url.Authority}";
+        // http dla dev, https dla deploy[!]
+        public static readonly string Home = $"https://{HttpContext.Current.Request.Url.Authority}";
+        public const string AppName = "webapp-template";
     }
 }

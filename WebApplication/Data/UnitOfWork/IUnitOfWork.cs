@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Data.UnitOfWork
 {
@@ -6,6 +7,6 @@ namespace Data.UnitOfWork
     {
         // przykład: IDayRepository Days { get; }
         int Complete();
-
+        Task<int> CompleteAsync();
     }
 }

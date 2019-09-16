@@ -17,7 +17,6 @@ namespace Core.Utilities
             await ConfigSendGridAsync(message);
         }
 
-        // Use NuGet to install SendGrid (Basic C# client lib) 
         private static async Task ConfigSendGridAsync(IdentityMessage message)
         {
             var credentials = new NetworkCredential(
@@ -25,7 +24,7 @@ namespace Core.Utilities
                 ConfigurationManager.AppSettings["mailPassword"]
             );
 
-            // Send the email.
+            // Wyślij email
             await SendEmailAsync(credentials, message);
         }
 
@@ -33,23 +32,29 @@ namespace Core.Utilities
         {
             try
             {
-                MailMessage mail = new MailMessage("szymon.pitula@codeteam.pl", message.Destination);
-                SmtpClient client = new SmtpClient("smtp-u9hna.vipserv.org");
+                var mail = new MailMessage
+                {
+                    From = new MailAddress(ConfigurationManager.AppSettings["mailAccount"], Constants.AppName),
+                    Body = message.Body,
+                    BodyEncoding = Encoding.UTF8,
+                    Subject = message.Subject,
+                    To = { message.Destination },
+                    IsBodyHtml = true
+                };
 
-                mail.Subject = message.Subject;
-                mail.Body = message.Body;
-                mail.BodyEncoding = Encoding.UTF8;
+                var client = new SmtpClient("smtp-u9hna.vipserv.org")
+                {
+                    Port = 587, UseDefaultCredentials = false,
+                    EnableSsl = false,
+                    Credentials = credentials
+                };
 
-                client.Port = 587;
-                client.UseDefaultCredentials = false;
-                client.EnableSsl = false;
-                client.Credentials = credentials;
                 client.Send(mail);
             }
             catch (Exception e)
             {
                 // ignored
-            } 
+            }
         }
     }
 }
