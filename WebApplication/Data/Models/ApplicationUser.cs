@@ -20,6 +20,8 @@ namespace Data.Models
 
         public DateTime? BirthDate { get; set; }
 
+        public string Token { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager,
             string authenticationType)
         {

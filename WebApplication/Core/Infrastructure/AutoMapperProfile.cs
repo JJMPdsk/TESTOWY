@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Core.ViewModels.Account;
 using Core.ViewModels.Account.EditProfile;
 using Core.ViewModels.Account.GetUserDetails;
 using Core.ViewModels.Account.Register;
@@ -10,6 +9,14 @@ namespace Core.Infrastructure
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
+        {
+            MapsForAccount();
+        }
+
+        /// <summary>
+        /// Zawiera profile dla kontrolera Account
+        /// </summary>
+        private void MapsForAccount()
         {
             CreateMap<AccountRegisterApplicationUserViewModel, ApplicationUser>();
             CreateMap<ApplicationUser, AccountRegisterApplicationUserViewModel>();

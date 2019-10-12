@@ -5,39 +5,38 @@
 
 <h2>Edycja profilu</h2>
 
-@using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+@using (Html.BeginForm("EditProfile", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Zmień szczegóły dotyczące Twojego konta</h4>
-    <hr/>
-    @Html.ValidationSummary("", new {@class = "text-danger"})
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
-        @Html.LabelFor(m => m.FirstName, new {@class = "col-md-2 control-label"})
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.FirstName, new {@class = "form-control"})
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.LastName, new {@class = "col-md-2 control-label"})
+        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.LastName, new {@class = "form-control"})
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(m => m.BirthDate, new {@class = "col-md-2 control-label"})
+        @Html.LabelFor(m => m.BirthDate, new { @class = "col-md-3 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.BirthDate, "{0:dd\\/MM\\/yyyy}", new {@class = "form-control datepicker"})
+            @Html.TextBoxFor(m => m.BirthDate, "{0:dd\\/MM\\/yyyy}", new { @class = "form-control datepicker" })
         </div>
     </div>
     <div class="form-group">
-        <div class="col-xs-6 col-sm-1 col-md-1 col-md-offset-2">
-            <input type="submit" class="btn btn-primary" value="Zapisz"/>
-        </div>
-        <div class="col-xs-6 col-sm-1 col-sm-offset-2 col-md-1 col-md-offset-2">
-            @Html.ActionLink("Zmiana hasła", "ChangePassword", null, new {@class = "btn btn-default"})
-        </div>
+        <input type="submit" class="btn btn-primary" value="Zapisz" />
+        @Html.ActionLink("Zmiana hasła", "ChangePassword", null, new { @class = "btn offset-4 offset-md-3 offset-lg-2" })
     </div>
+
+
+
 }
 
 @section Scripts {
@@ -47,7 +46,7 @@
 
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
             language: 'pl',

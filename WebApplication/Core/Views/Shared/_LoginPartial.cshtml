@@ -1,15 +1,16 @@
-﻿@if (Request.IsAuthenticated)
+﻿@using Core.Utilities
+@if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.BeginForm("Logout", "Account", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
     {
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("Witaj " + User.Identity.Name + "!", "EditProfile", "Account", null, new { title = "Edycja profilu" })
+            <li class="@Html.IsSelected(actions: "EditProfile", controllers: "Account")">
+                @Html.ActionLink("Witaj " + User.Identity.Name + "!", "EditProfile", "Account", null, new { title = "Edycja profilu", @class="nav-link" })
             </li>
             <li>
-                <a href="javascript:document.getElementById('logoutForm').submit()">Wyloguj się</a>
+                <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Wyloguj się</a>
             </li>
         </ul>
     }
@@ -17,7 +18,11 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Rejestracja", "Register", "Account", null, new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Logowanie", "Login", "Account", null, new { id = "loginLink" })</li>
+        <li class="@Html.IsSelected(actions: "Register", controllers: "Account")">
+            @Html.ActionLink("Rejestracja", "Register", "Account", null, new {id = "registerLink", @class="nav-link"})
+        </li>
+        <li class="@Html.IsSelected(actions: "Login", controllers: "Account")">
+            @Html.ActionLink("Logowanie", "Login", "Account", null, new { id = "loginLink", @class="nav-link" })
+        </li>
     </ul>
 }

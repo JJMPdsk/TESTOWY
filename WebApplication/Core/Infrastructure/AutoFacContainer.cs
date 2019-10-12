@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +9,6 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using AutoMapper;
-using Core.Infrastructure;
 using Core.Services;
 using Core.Services.Interfaces;
 using Core.Utilities;
@@ -26,7 +24,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.DataProtection;
 using IContainer = Autofac.IContainer;
 
-namespace Core
+namespace Core.Infrastructure
 {
     public static class AutoFacContainer
     {
