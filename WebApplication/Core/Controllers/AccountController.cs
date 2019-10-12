@@ -105,12 +105,12 @@ namespace Core.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var loginSucceeded = await _accountService.LoginAsync(model);
+            var loginResult = await _accountService.LoginAsync(model);
 
             // Jeśli pomyślnie zalogowano, wracamy do miejsca, z którego zostaliśmy wysłani do ekranu logowania
-            if (loginSucceeded) return RedirectToLocal(returnUrl);
+            if (loginResult == string.Empty) return RedirectToLocal(returnUrl);
 
-            ModelState.AddModelError("", "Nieprawidłowa nazwa użytkownika lub hasło.");
+            ModelState.AddModelError("", loginResult);
             // Jeśli doszliśmy tutaj, to coś się nie powiodło - pokaż widok jeszcze raz
             return View(model);
         }
@@ -247,7 +247,7 @@ namespace Core.Controllers
             await _accountService.ForgotPasswordAsync(user.Id);
 
             return isUserEmailConfirmed
-                ? (ActionResult) RedirectToAction("ForgotPasswordConfirmation", "Account")
+                ? (ActionResult)RedirectToAction("ForgotPasswordConfirmation", "Account")
                 : View("PleaseConfirmEmail");
         }
 
@@ -318,6 +318,19 @@ namespace Core.Controllers
             _accountService.Logout(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Login", "Account");
         }
+
+        /// <summary>
+        ///     Endpoint do pobierania tokena przypisanego do aktualnie zalogowanego użytkownika
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("Account/GetCurrentToken")]
+        public async Task<JsonResult> GetCurrentToken()
+        {
+            var token = await _accountService.GetCurrentTokenAsync(User.Identity.Name);
+            return Json(token, JsonRequestBehavior.AllowGet);
+        }
+
 
         /// <summary>
         ///     Pomocnicza metoda dodająca do ModelState błędy, które następnie będą renderowane w widoku.

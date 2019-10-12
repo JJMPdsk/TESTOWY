@@ -11,6 +11,7 @@ using Autofac.Integration.WebApi;
 using AutoMapper;
 using Core.Services;
 using Core.Services.Interfaces;
+using Core.Services.Utilities;
 using Core.Utilities;
 using Data;
 using Data.Models;
@@ -93,6 +94,7 @@ namespace Core.Infrastructure
         private static void RegisterServices(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterType<AccountService>().As<IAccountService>();
+            containerBuilder.RegisterType<TokenProvider>().As<ITokenProvider>();
         }
 
         /// <summary>
@@ -102,6 +104,7 @@ namespace Core.Infrastructure
         private static void RegisterRepositories(ContainerBuilder containerBuilder)
         {
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>));
+            containerBuilder.RegisterType<UsersRepository>().As<IUsersRepository>();
         }
 
         /// <summary>

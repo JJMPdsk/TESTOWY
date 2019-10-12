@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Data.Models;
+using Data.Repositories;
+using Data.Repositories.Interfaces;
 
 namespace Data.UnitOfWork
 {
@@ -7,9 +9,9 @@ namespace Data.UnitOfWork
     {
         private readonly ApplicationDbContext _context;
 
-        // przykład:
-        // private IDaysRepository _daysRepository;
-        // public IDaysRepository => _daysRepository ?? (_daysRepository = new DaysRepository(_context));
+        private IUsersRepository _usersRepository;
+        public IUsersRepository UsersRepository =>
+            _usersRepository ?? (_usersRepository = new UsersRepository(_context));
 
         public UnitOfWork(ApplicationDbContext context)
         {

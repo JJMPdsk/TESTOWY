@@ -218,6 +218,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Services\Interfaces\IService.cs" />
     <Compile Include="Services\Service.cs" />
+    <Compile Include="Services\Utilities\ITokenProvider.cs" />
+    <Compile Include="Services\Utilities\TokenProvider.cs" />
     <Compile Include="Utilities\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -571,7 +573,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Services\Utilities\" />
     <Folder Include="ViewModels\Shared\" />
   </ItemGroup>
   <ItemGroup>

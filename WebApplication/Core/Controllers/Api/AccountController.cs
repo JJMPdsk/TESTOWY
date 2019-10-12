@@ -4,10 +4,8 @@ using AutoMapper;
 using Core.Services.Interfaces;
 using Core.ViewModels.Account.ChangePassword;
 using Core.ViewModels.Account.EditProfile;
-using Core.ViewModels.Account.GetUserDetails;
 using Core.ViewModels.Account.Register;
 using Data.Models;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security.Cookies;
 using Constants = Core.Utilities.Constants;
@@ -15,8 +13,7 @@ using Constants = Core.Utilities.Constants;
 namespace Core.Controllers.Api
 {
     /// <summary>
-    /// API dla zarządzania kontem użytkownika
-    /// Logowanie znajduje się pod endpointem /Token
+    ///     API dla zarządzania kontem użytkownika
     /// </summary>
     [Authorize]
     [RoutePrefix("api/Account")]
@@ -25,27 +22,6 @@ namespace Core.Controllers.Api
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
 
-        /// <summary>
-        /// Metoda pomocnicza do zwracania pełniejszych informacji o błędzie
-        /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
-        private IHttpActionResult GetErrorResult(IdentityResult result)
-        {
-            if (result == null) return InternalServerError();
-
-            if (result.Succeeded) return null;
-            if (result.Errors != null)
-                foreach (var error in result.Errors)
-                    ModelState.AddModelError("", error);
-
-            if (ModelState.IsValid)
-                // No ModelState errors are available to send, so just return an empty BadRequest.
-                return BadRequest();
-
-            return BadRequest(ModelState);
-        }
-
         public AccountController(IAccountService accountService, IMapper mapper)
         {
             _accountService = accountService;
@@ -53,8 +29,8 @@ namespace Core.Controllers.Api
         }
 
         /// <summary>
-        /// POST api/Account/Register
-        /// Endpoint do rejestrowania użytkownika
+        ///     POST api/Account/Register
+        ///     Endpoint do rejestrowania użytkownika
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -73,8 +49,8 @@ namespace Core.Controllers.Api
         }
 
         /// <summary>
-        /// GET api/Account/ConfirmEmail
-        /// Endpoint do potwierdzania emaila użytkownika.
+        ///     GET api/Account/ConfirmEmail
+        ///     Endpoint do potwierdzania emaila użytkownika.
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="code"></param>
@@ -101,8 +77,8 @@ namespace Core.Controllers.Api
         }
 
         /// <summary>
-        /// POST api/Account/EditProfile
-        /// Endpoint do edycji profilu użytkownika.
+        ///     POST api/Account/EditProfile
+        ///     Endpoint do edycji profilu użytkownika.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -121,8 +97,8 @@ namespace Core.Controllers.Api
         }
 
         /// <summary>
-        /// POST api/Account/ChangePassword
-        /// Endpoint do zmiany hasła użytkownika
+        ///     POST api/Account/ChangePassword
+        ///     Endpoint do zmiany hasła użytkownika
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -142,22 +118,9 @@ namespace Core.Controllers.Api
             return Ok();
         }
 
-        [HttpGet]
-        [Route("GetUserDetails")]
-        public async Task<IHttpActionResult> GetUserDetails(string userName)
-        {
-            if (userName.IsNullOrWhiteSpace()) return BadRequest("Nazwa użytkownika nie może być pusta");
-
-            var user = await _accountService.FindUserByUserNameAsync(userName);
-            if (user == null) return BadRequest("Użytkownik o takiej nazwien nie istnieje");
-
-            var model = _mapper.Map<ApplicationUser, AccountGetUserDetailsApplicationUserViewModel>(user);
-            return Ok(model);
-        }
-
         /// <summary>
-        /// Endpoint do wylogowywania użytkownika przez API (dla przeglądarek [ciasteczka])
-        /// Aby wylogować się z aplikacji mobilnej należy usunąć header Authorize Bearer {token} z requestów
+        ///     Endpoint do wylogowywania użytkownika przez API (dla przeglądarek [ciasteczka])
+        ///     Aby wylogować się z aplikacji mobilnej należy usunąć header Authorize Bearer {token} z requestów
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -166,6 +129,27 @@ namespace Core.Controllers.Api
         {
             _accountService.Logout(CookieAuthenticationDefaults.AuthenticationType);
             return Ok();
+        }
+
+        /// <summary>
+        ///     Metoda pomocnicza do zwracania pełniejszych informacji o błędzie
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        private IHttpActionResult GetErrorResult(IdentityResult result)
+        {
+            if (result == null) return InternalServerError();
+
+            if (result.Succeeded) return null;
+            if (result.Errors != null)
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error);
+
+            if (ModelState.IsValid)
+                // No ModelState errors are available to send, so just return an empty BadRequest.
+                return BadRequest();
+
+            return BadRequest(ModelState);
         }
     }
 }
