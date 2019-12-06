@@ -27,6 +27,8 @@ namespace Core.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ApplicationUserManager _userManager;
 
+        private static bool _firstRun = true;
+
         public AccountService(IUnitOfWork unitOfWork, IAuthenticationManager authenticationManager,
             ApplicationUserManager userManager, ITokenProvider tokenProvider)
         {
@@ -34,6 +36,7 @@ namespace Core.Services
             _authenticationManager = authenticationManager;
             _userManager = userManager;
             _tokenProvider = tokenProvider;
+            if (_firstRun) EnsureAdminExists(adminUsername: Constants.AdminUsername, adminEmail: "systems@codeteam.pl");
         }
 
         public async Task<IdentityResult> RegisterAsync(ApplicationUser user, string password)
@@ -43,6 +46,7 @@ namespace Core.Services
 
             // domyślnie tworzymy użytkownika o roli{claimsie} "User"
             await _userManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, RoleName.User));
+            await _userManager.AddClaimAsync(user.Id, new Claim("FirstName", user.FirstName));
             await SignInAsync(user, false);
 
             // potwierdzenie email
@@ -132,8 +136,7 @@ namespace Core.Services
         {
             _authenticationManager.SignOut(authType);
         }
-
-
+        
         public void Dispose()
         {
             _unitOfWork?.Dispose();
@@ -184,6 +187,27 @@ namespace Core.Services
                 await UpdateDatabaseAsync(_unitOfWork);
                 return string.Empty;
             }
+        }
+
+        private void EnsureAdminExists(string adminUsername, string adminEmail)
+        {
+            _firstRun = false;
+            var admin = _userManager.FindByName(adminUsername);
+            if (admin != null) return;
+
+            var adminAccount = new ApplicationUser
+            {
+                UserName = adminUsername,
+                Email = adminEmail,
+                FirstName = "Administrator",
+                LastName = Constants.AppName
+            };
+
+            var result = _userManager.Create(adminAccount, "Admin123!");
+            if (!result.Succeeded) throw new Exception("Błąd podczas tworzenia konta administratora");
+
+            _userManager.AddClaim(adminAccount.Id, new Claim(ClaimTypes.Role, RoleName.Administrator));
+            SendEmailConfirmationTokenAsync(adminAccount.Id, "Administratorze, potwierdź swoje konto").Wait();
         }
 
         private async Task SendPasswordResetEmailConfirmationLinkAsync(string userId)

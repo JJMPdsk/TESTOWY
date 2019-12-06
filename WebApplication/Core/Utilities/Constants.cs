@@ -7,5 +7,6 @@ namespace Core.Utilities
         // http dla dev, https dla deploy[!]
         public static readonly string Home = $"https://{HttpContext.Current.Request.Url.Authority}";
         public const string AppName = "webapp-template";
+        public const string AdminUsername = "TemplateAdmin";
     }
 }

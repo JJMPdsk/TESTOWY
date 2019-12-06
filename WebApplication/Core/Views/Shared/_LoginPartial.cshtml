@@ -1,13 +1,19 @@
-﻿@using Core.Utilities
+﻿@using System.Security.Claims
+@using Core.Utilities
+@using Microsoft.Ajax.Utilities
+@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("Logout", "Account", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
     {
         @Html.AntiForgeryToken()
 
+        var identityClaim = ((ClaimsIdentity) User.Identity).FindFirst("FirstName");
+        var userName = identityClaim == null ? User.Identity.Name : identityClaim.Value;
+
         <ul class="nav navbar-nav navbar-right">
             <li class="@Html.IsSelected(actions: "EditProfile", controllers: "Account")">
-                @Html.ActionLink("Witaj " + User.Identity.Name + "!", "EditProfile", "Account", null, new { title = "Edycja profilu", @class="nav-link" })
+                @Html.ActionLink("Witaj " + userName + "!", "EditProfile", "Account", null, new { title = "Edycja profilu", @class="nav-link" })
             </li>
             <li>
                 <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Wyloguj się</a>
