@@ -28,7 +28,7 @@ namespace Core.Controllers
         private readonly IAccountService _accountService;
 
         /// <summary>
-        ///     AutoMapper do mapowania DOM <---> ViewModel
+        ///     AutoMapper do mapowania Model -ViewModel
         /// </summary>
         private readonly IMapper _mapper;
 
@@ -161,10 +161,7 @@ namespace Core.Controllers
                     ModelState.AddModelError("", "Wystąpił błąd podczas zapisu");
                     return View(model);
                 }
-                else
-                {
-                    TempData["success"] = "Imię zostanie zaktualizowane przy następnym logowaniu.";
-                }
+                TempData["success"] = "Imię zostanie zaktualizowane przy następnym logowaniu.";
             }
 
             _mapper.Map(model, user);

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -49,7 +47,7 @@ namespace Core.Utilities
                     Credentials = credentials
                 };
 
-                client.Send(mail);
+                await client.SendMailAsync(mail);
             }
             catch (Exception e)
             {

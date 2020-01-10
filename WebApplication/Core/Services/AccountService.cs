@@ -154,7 +154,7 @@ namespace Core.Services
         public async Task<ServiceResponse> ChangeNameInNavbarAsync(string userId, string oldName, string newName)
         {
             var result = await _unitOfWork.UsersRepository.ChangeUserFirstNameClaimAsync(userId, oldName, newName);
-            return result == true ? new ServiceResponse(ResponseType.Ok) : new ServiceResponse(ResponseType.Error, "Wystąpił błąd podczas zmiany nazwy w claimie");
+            return result ? new ServiceResponse(ResponseType.Ok) : new ServiceResponse(ResponseType.Error, "Wystąpił błąd podczas zmiany nazwy w claimie");
         }
 
         public void Logout(string authType)
