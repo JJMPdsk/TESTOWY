@@ -323,12 +323,15 @@ namespace Core.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = await _accountService.FindUserByUserNameAsync(model.UserName);
             if (user == null)
-                // Nie pokazuj, że użytkownika nie ma w bazie
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            {
+                TempData["error"] = "Nie istnieje użytkownik o podanym loginie";
+                return View(model);
+            }
+
             var result = await _accountService.ResetUserPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded) return RedirectToAction("ResetPasswordConfirmation", "Account");
             AddErrors(result);
-            return View();
+            return View(model);
         }
 
         /// <summary>
