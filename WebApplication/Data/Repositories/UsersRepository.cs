@@ -42,7 +42,7 @@ namespace Data.Repositories
             var user = await Context.Set<ApplicationUser>().SingleOrDefaultAsync(u => u.Id == userId);
             if (user == null) return false;
 
-            var claim = user.Claims.SingleOrDefault(c => c.UserId == userId && c.ClaimValue.Equals(oldName));
+            var claim = user.Claims.SingleOrDefault(c => c.UserId == userId && c.ClaimValue.Equals(oldName) &&  c.ClaimType.Equals("FirstName"));
             if (claim == null) return false;
 
             claim.ClaimValue = newName;

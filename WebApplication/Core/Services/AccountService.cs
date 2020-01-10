@@ -220,11 +220,13 @@ namespace Core.Services
             var admin = _userManager.FindByName(adminUsername);
             if (admin != null) return;
 
+            string adminFirstName = "Administrator";
+
             var adminAccount = new ApplicationUser
             {
                 UserName = adminUsername,
                 Email = adminEmail,
-                FirstName = "Administrator",
+                FirstName = adminFirstName,
                 LastName = Constants.AppName
             };
 
@@ -232,6 +234,7 @@ namespace Core.Services
             if (!result.Succeeded) throw new Exception("Błąd podczas tworzenia konta administratora");
 
             _userManager.AddClaim(adminAccount.Id, new Claim(ClaimTypes.Role, RoleName.Administrator));
+             _userManager.AddClaim(adminAccount.Id, new Claim("FirstName", adminFirstName));
             SendEmailConfirmationTokenAsync(adminAccount.Id, "Administratorze, potwierdź swoje konto", RoleName.Administrator).Wait();
         }
 

@@ -161,6 +161,10 @@ namespace Core.Controllers
                     ModelState.AddModelError("", "Wystąpił błąd podczas zapisu");
                     return View(model);
                 }
+                else
+                {
+                    TempData["success"] = "Imię zostanie zaktualizowane przy następnym logowaniu.";
+                }
             }
 
             _mapper.Map(model, user);
@@ -168,7 +172,7 @@ namespace Core.Controllers
             var result = await _accountService.UpdateUserAsync(user);
 
             if (result.Succeeded)
-                ViewBag.Message = "Profil został zaktualizowany";
+                TempData["success"] += "Profil został zaktualizowany";
             else
                 ModelState.AddModelError("", "Wystąpił błąd podczas zapisu");
 
