@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using Data.Models;
 using Data.Repositories.Interfaces;
@@ -34,6 +35,18 @@ namespace Data.Repositories
         {
             return await Context.Set<ApplicationUser>().SingleOrDefaultAsync(c => c.Email == email);
 
+        }
+
+        public async Task<bool> ChangeUserFirstNameClaimAsync(string userId, string oldName, string newName)
+        {
+            var user = await Context.Set<ApplicationUser>().SingleOrDefaultAsync(u => u.Id == userId);
+            if (user == null) return false;
+
+            var claim = user.Claims.SingleOrDefault(c => c.UserId == userId && c.ClaimValue.Equals(oldName));
+            if (claim == null) return false;
+
+            claim.ClaimValue = newName;
+            return await Context.SaveChangesAsync() > 0;
         }
     }
 }

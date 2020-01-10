@@ -219,6 +219,8 @@
     <Compile Include="Services\Interfaces\IService.cs" />
     <Compile Include="Services\Service.cs" />
     <Compile Include="Services\Utilities\ITokenProvider.cs" />
+    <Compile Include="Services\Utilities\ResponseType.cs" />
+    <Compile Include="Services\Utilities\ServiceResponse.cs" />
     <Compile Include="Services\Utilities\TokenProvider.cs" />
     <Compile Include="Utilities\EmailService.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -442,6 +444,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.overrides.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker-en-CA.min.js" />
@@ -526,6 +529,10 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.vi.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />

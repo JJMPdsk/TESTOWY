@@ -9,8 +9,17 @@
     padding-right: 15px;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
+/* utilities */
+.hidden {
+    display: none;
+}
 
-input,
-select,
-textarea { max-width: 280px; }
+/* bootstrap validation error */
+.input-validation-error {
+    border: 1px solid #dc3545;
+}
+
+.field-validation-error {
+    color: #dc3545;
+    font-size: 12.8px;
+}

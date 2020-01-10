@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using AutoMapper;
 using Core.Services.Interfaces;
+using Core.Services.Utilities;
 using Core.ViewModels.Account.ChangePassword;
 using Core.ViewModels.Account.EditProfile;
 using Core.ViewModels.Account.ForgotPassword;
@@ -18,6 +19,7 @@ namespace Core.Controllers
     ///     Dostęp autoryzowany chyba, że akcja stanowi inaczej.
     /// </summary>
     [Authorize]
+    [RoutePrefix("konto")]
     public class AccountController : Controller
     {
         /// <summary>
@@ -42,8 +44,12 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
+        [Route("rejestracja")]
         public ActionResult Register()
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
 
@@ -55,20 +61,23 @@ namespace Core.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("rejestracja")]
         public async Task<ActionResult> Register(AccountRegisterApplicationUserViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+                return View("Register", model);
 
             var user = _mapper.Map<AccountRegisterApplicationUserViewModel, ApplicationUser>(model);
 
-            var result = await _accountService.RegisterAsync(user, model.Password);
+            var result = await _accountService.RegisterAsync(user, model.Password, model.RoleName);
 
-            if (result.Succeeded) return RedirectToAction("Index", "Home");
+            if (result.Succeeded)
+                return RedirectToAction("Index", "Home");
 
             AddErrors(result);
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            // Coś poszło nie tak - wyświetl formularz
+            return View("Register", model);
         }
 
         /// <summary>
@@ -139,6 +148,16 @@ namespace Core.Controllers
         {
             if (!ModelState.IsValid) return View(model);
             var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
+
+            if (!model.FirstName.Equals(user.FirstName))
+            {
+                var response = await _accountService.ChangeNameInNavbarAsync(user.Id, user.FirstName, model.FirstName);
+                if (response.ResponseType == ResponseType.Error)
+                {
+                    ModelState.AddModelError("", "Wystąpił błąd podczas zapisu");
+                    return View(model);
+                }
+            }
 
             _mapper.Map(model, user);
 

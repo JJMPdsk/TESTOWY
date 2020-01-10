@@ -33,5 +33,14 @@ namespace Data.Repositories.Interfaces
         /// <param name="email"></param>
         /// <returns></returns>
         Task<ApplicationUser> GetUserByEmailAsync(string email);
+
+        /// <summary>
+        ///     Zmienia claima FirstName użytkownika na nowy
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        /// <returns></returns>
+        Task<bool> ChangeUserFirstNameClaimAsync(string userId, string oldName, string newName);
     }
 }

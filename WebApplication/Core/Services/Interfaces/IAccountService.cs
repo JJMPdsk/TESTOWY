@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Core.Services.Utilities;
 using Core.ViewModels.Account.Login;
 using Data.Models;
 using Microsoft.AspNet.Identity;
@@ -62,8 +63,9 @@ namespace Core.Services.Interfaces
         /// </summary>
         /// <param name="user"></param>
         /// <param name="password"></param>
+        /// <param name="roleName"></param>
         /// <returns></returns>
-        Task<IdentityResult> RegisterAsync(ApplicationUser user, string password);
+        Task<IdentityResult> RegisterAsync(ApplicationUser user, string password, string roleName);
 
         /// <summary>
         ///     Metoda do potwierdzania adresu e-mail użytkownika
@@ -104,5 +106,11 @@ namespace Core.Services.Interfaces
         /// <param name="userName"></param>
         /// <returns></returns>
         Task<string> GetCurrentTokenAsync(string userName);
+
+        /// <summary>
+        ///     Zmienia nazwę w navbarze przy edycji imienia.
+        /// </summary>
+        /// <returns></returns>
+        Task<ServiceResponse> ChangeNameInNavbarAsync(string userId, string oldName, string newName);
     }
 }

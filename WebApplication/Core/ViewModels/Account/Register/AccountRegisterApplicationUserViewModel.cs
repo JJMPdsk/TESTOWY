@@ -36,5 +36,9 @@ namespace Core.ViewModels.Account.Register
 
         [Display(Name = "Data urodzenia")]
         public DateTime? BirthDate { get; set; }
+
+        [Required(ErrorMessage = "Pole Typ użytkownika jest wymagane")]
+        [Display(Name = "Typ użytkownika")]
+        public string RoleName { get; set; }
     }
 }

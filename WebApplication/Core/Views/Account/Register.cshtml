@@ -1,77 +1,128 @@
-﻿@model Core.ViewModels.Account.Register.AccountRegisterApplicationUserViewModel
+﻿@using Data.Models
+@model Core.ViewModels.Account.Register.AccountRegisterApplicationUserViewModel
 @{
     ViewBag.Title = "Rejestracja";
 }
 
-<h2>Rejestracja</h2>
+<div class="row justify-content-center">
+    <div class="col-10 rounded shadow">
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
-{
-    @Html.AntiForgeryToken()
-    <h4>Utwórz konto</h4>
-    <hr/>
-    @Html.ValidationSummary("", new {@class = "text-danger"})
-    <div class="form-group">
-        @Html.LabelFor(m => m.UserName, new {@class = "col-md-2 control-label"})
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.UserName, new {@class = "form-control"})
+        <div class="row justify-content-center pt-3">
+            <h3>Rejestracja</h3>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new {@class = "col-md-2 control-label"})
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
+        <hr />
+
+        <div class="row justify-content-center p-3">
+
+            <div class="col">
+                @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.UserName, new { @class = "col-form-label" })
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.UserName)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-form-label" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email)
+
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-form-label" })
+                        <div class="input-group">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            <div class="input-group-append">
+                                <div class="btn btn-outline-ezzy-primary rounded-sm" id="passwordTooltip">
+                                    ?
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Password)
+
+                            <div class="hidden tooltip-js">
+                                <small class="text-danger"> Hasło musi składać się z co najmniej 6 znaków, zawierać co najmniej jeden znak niebędący literą lub cyfrą, zawierać co najmniej jedną cyfrę (0–9), Hasło musi zawierać co najmniej jedną wielką literę (A–Z). </small>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-form-label" })
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword)
+
+                    </div>
+                    <div class="form-group">
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.FirstName, new { @class = "col-form-label" })
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.FirstName)
+
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.LastName, new { @class = "col-form-label" })
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.LastName)
+
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.BirthDate, new { @class = "col-form-label" })
+                        @Html.TextBoxFor(m => m.BirthDate, "{0:dd\\/MM\\/yyyy}", new { @class = "form-control datepicker" })
+                        @Html.ValidationMessageFor(m => m.BirthDate)
+
+                    </div>
+
+                    @Html.HiddenFor(m => m.RoleName, new { Value = RoleName.User })
+                    <div class="form-group">
+                        <button type="submit" id="submitButton" class="btn btn-block btn-primary">
+                            <span class="text">Utwórz konto</span>
+                            <span class="spinner hidden spinner-border spinner-border-sm" role="status"></span>
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <small class="my-2 text-muted">
+                Klikając przycisk "Utwórz konto" zgadzasz się na regulamin serwisu.
+            </small>
         </div>
+
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new {@class = "col-md-2 control-label"})
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new {@class = "form-control"})
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new {@class = "col-md-2 control-label"})
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new {@class = "form-control"})
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.FirstName, new {@class = "col-md-2 control-label"})
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.FirstName, new {@class = "form-control"})
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.LastName, new {@class = "col-md-2 control-label"})
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.LastName, new {@class = "form-control"})
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.BirthDate, new {@class = "col-md-2 control-label"})
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.BirthDate, "{0:dd\\/MM\\/yyyy}", new {@class = "form-control datepicker"})
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="offset-md-2 col-md-10">
-            <input type="submit" class="btn btn-primary" value="Utwórz konto"/>
-        </div>
-    </div>
-}
+
+</div>
+
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/locales/bootstrap-datepicker.pl.min.js" charset="UTF-8"></script>
+    <script src="~/Scripts/moment.js"></script>
 }
 
-
 <script type="text/javascript">
-    $(function() {
+    $(function () {
+        // disable button
+        $("#submitButton").click(function () {
+            if ($("form").valid()) {
+                $("#submitButton").attr("disabled", true);
+                $("#submitButton").children(".text, .spinner").toggleClass("hidden");
+            }
+        });
+
         $('.datepicker').datepicker({
             format: 'dd/mm/yyyy',
             language: 'pl',
             startDate: '01/01/1890'
         });
+
+        $.validator.methods.date = function (value, element) {
+            return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
+        };
+
+        $("#passwordTooltip").click(function () {
+            $(".tooltip-js").toggleClass("hidden");
+        });
+
     });
 </script>

@@ -43,7 +43,7 @@ namespace Core.Controllers.Api
 
             var user = _mapper.Map<AccountRegisterApplicationUserViewModel, ApplicationUser>(model);
 
-            var result = await _accountService.RegisterAsync(user, model.Password);
+            var result = await _accountService.RegisterAsync(user, model.Password, model.RoleName);
 
             return !result.Succeeded ? GetErrorResult(result) : Ok();
         }

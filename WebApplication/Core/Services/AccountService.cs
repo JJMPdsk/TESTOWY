@@ -39,18 +39,37 @@ namespace Core.Services
             if (_firstRun) EnsureAdminExists(adminUsername: Constants.AdminUsername, adminEmail: "systems@codeteam.pl");
         }
 
-        public async Task<IdentityResult> RegisterAsync(ApplicationUser user, string password)
+        public async Task<IdentityResult> RegisterAsync(ApplicationUser user, string password, string roleName)
         {
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded) return result;
 
             // domyślnie tworzymy użytkownika o roli{claimsie} "User"
             await _userManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, RoleName.User));
+            await _userManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, roleName));
             await _userManager.AddClaimAsync(user.Id, new Claim("FirstName", user.FirstName));
+
+            // jeśli w aplikacji mamy tabele odpowiadające rolom, możemy
+            // w tym miejscu zdefiniować typ rejestrowanego użytkownika i dodać go do osobnej tabeli
+            // switch (roleName)
+            // {
+            //     case RoleName.Tourist:
+            //         await AddTouristAsync(user.Id);
+            //         break;
+            //     case RoleName.Guide:
+            //         await AddGuideAsync(user.Id);
+            //         break;
+            //     default:
+            //         await AddTouristAsync(user.Id);
+            //         break;
+            // }
+
             await SignInAsync(user, false);
 
+            await GenerateAccessTokenAsync(user.UserName, password);
+
             // potwierdzenie email
-            await SendEmailConfirmationTokenAsync(user.Id, "Potwierdź swoje konto");
+            await SendEmailConfirmationTokenAsync(user.Id, $"Witamy w serwisie {Constants.AppName}!", roleName);
             return IdentityResult.Success;
         }
 
@@ -117,7 +136,7 @@ namespace Core.Services
             if (await IsUserEmailConfirmedAsync(userId))
                 await SendPasswordResetEmailConfirmationLinkAsync(userId);
             else
-                await SendEmailConfirmationTokenAsync(userId, "Potwierdź swoje konto");
+                await SendEmailConfirmationTokenAsync(userId, $"Witamy w serwisie {Constants.AppName}!", RoleName.User);
         }
 
 
@@ -132,11 +151,17 @@ namespace Core.Services
             return await _tokenProvider.GetCurrentTokenAsync(userName);
         }
 
+        public async Task<ServiceResponse> ChangeNameInNavbarAsync(string userId, string oldName, string newName)
+        {
+            var result = await _unitOfWork.UsersRepository.ChangeUserFirstNameClaimAsync(userId, oldName, newName);
+            return result == true ? new ServiceResponse(ResponseType.Ok) : new ServiceResponse(ResponseType.Error, "Wystąpił błąd podczas zmiany nazwy w claimie");
+        }
+
         public void Logout(string authType)
         {
             _authenticationManager.SignOut(authType);
         }
-        
+
         public void Dispose()
         {
             _unitOfWork?.Dispose();
@@ -207,27 +232,45 @@ namespace Core.Services
             if (!result.Succeeded) throw new Exception("Błąd podczas tworzenia konta administratora");
 
             _userManager.AddClaim(adminAccount.Id, new Claim(ClaimTypes.Role, RoleName.Administrator));
-            SendEmailConfirmationTokenAsync(adminAccount.Id, "Administratorze, potwierdź swoje konto").Wait();
+            SendEmailConfirmationTokenAsync(adminAccount.Id, "Administratorze, potwierdź swoje konto", RoleName.Administrator).Wait();
         }
 
         private async Task SendPasswordResetEmailConfirmationLinkAsync(string userId)
         {
             var code = await _userManager.GeneratePasswordResetTokenAsync(userId);
-            var callbackUrl = new Uri(Constants.Home + "/Account/ResetPassword").AddParameter("userId", userId)
+            var callbackUrl = new Uri(Constants.Home + "/konto/zresetuj-haslo").AddParameter("userId", userId)
                 .AddParameter("code", code)
                 .ToString();
             await _userManager.SendEmailAsync(userId, "Reset hasła",
                 "Zresetuj hasło, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
         }
 
-        private async Task<string> SendEmailConfirmationTokenAsync(string userId, string subject)
+        private async Task<string> SendEmailConfirmationTokenAsync(string userId, string subject, string roleName)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userId);
-            var callbackUrl = new Uri(Constants.Home + "/Account/ConfirmEmail").AddParameter("userId", userId)
+            var callbackUrl = new Uri(Constants.Home + "/konto/potwierdzenie-email").AddParameter("userId", userId)
                 .AddParameter("code", code)
                 .ToString();
-            await _userManager.SendEmailAsync(userId, subject,
-                "Potwierdź swoje konto, klikając <a href=\"" + callbackUrl + "\">tutaj</a>");
+
+            // w tym miejscu możemy zdefiniować różne wiadomości email w zależności od roli użytkownika
+            switch (roleName)
+            {
+                // case RoleName.Tourist:
+                //     await _userManager.SendEmailAsync(userId, subject,
+                //         "Witamy Przewodniku");
+                //     break;
+                // case RoleName.Guide:
+                //     await _userManager.SendEmailAsync(userId, subject,
+                //         "Witamy Przewodniku");
+                //     break;
+                default:
+                    await _userManager.SendEmailAsync(userId, subject,
+                        $"Witamy w serwisie {Constants.AppName}!<br/><br/>" +
+                        "Potwierdź swój adres email, klikając <a href=\"" + callbackUrl + "\">tutaj</a>. Dzięki " +
+                        "temu uzyskasz dostęp do funkcji przypominania hasła.");
+                    break;
+            }
+
             return callbackUrl;
         }
     }
