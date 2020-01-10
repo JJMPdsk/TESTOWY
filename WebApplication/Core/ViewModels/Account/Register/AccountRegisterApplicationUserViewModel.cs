@@ -5,10 +5,11 @@ namespace Core.ViewModels.Account.Register
 {
     public class AccountRegisterApplicationUserViewModel
     {
-        [Required] [Display(Name = "Login")]
+        [Required(ErrorMessage = "Pole Login jest wymagane")]
+        [Display(Name = "Login")]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Pole Hasło jest wymagane")]
         [StringLength(100, ErrorMessage = "{0} musi składać się z co najmniej {2} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Hasło")]
@@ -19,15 +20,16 @@ namespace Core.ViewModels.Account.Register
         [Compare("Password", ErrorMessage = "Podane hasła nie są takie same.")]
         public string ConfirmPassword { get; set; }
 
+        [Required(ErrorMessage = "Pole Email jest wymagane")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Pole Imię jest wymagane")]
         [StringLength(255)]
         [Display(Name = "Imię")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Pole Nazwisko jest wymagane")]
         [StringLength(255)]
         [Display(Name = "Nazwisko")]
         public string LastName { get; set; }

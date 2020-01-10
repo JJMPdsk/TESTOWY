@@ -4,12 +4,12 @@ namespace Core.ViewModels.Account.ChangePassword
 {
     public class AccountChangePasswordApplicationUserViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Pole Obecne hasło jest wymagane")]
         [DataType(DataType.Password)]
         [Display(Name = "Obecne hasło")]
         public string OldPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Pole Nowe hasło jest wymagane")]
         [StringLength(100, ErrorMessage = "{0} musi składać się z co najmniej {2} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Nowe hasło")]

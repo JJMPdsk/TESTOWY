@@ -4,7 +4,7 @@ namespace Core.ViewModels.Account.ForgotPassword
 {
     public class AccountForgotPasswordApplicationUserViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Pole Email jest wymagane")]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

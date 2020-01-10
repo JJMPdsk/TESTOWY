@@ -4,10 +4,12 @@ namespace Core.ViewModels.Account.ResetPassword
 {
     public class AccountResetPasswordApplicationUserViewModel
     {
-        [Required] [Display(Name = "Login")]
+        [Required(ErrorMessage = "Pole Login jest wymagane")]
+        [Display(Name = "Login")]
         public string UserName { get; set; }
 
-        [Required]
+
+        [Required(ErrorMessage = "Pole Hasło jest wymagane")]
         [StringLength(100, ErrorMessage = "{0} musi składać się z co najmniej {2} znaków.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Hasło")]

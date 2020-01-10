@@ -4,10 +4,11 @@ namespace Core.ViewModels.Account.Login
 {
     public class AccountLoginApplicationUserViewModel
     {
-        [Required] [Display(Name = "Login")]
+        [Required(ErrorMessage = "Pole Login jest wymagane")]
+        [Display(Name = "Login")]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Pole Hasło jest wymagane")]
         [DataType(DataType.Password)]
         [Display(Name = "Hasło")]
         public string Password { get; set; }
