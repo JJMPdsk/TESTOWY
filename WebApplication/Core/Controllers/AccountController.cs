@@ -91,6 +91,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
+        [Route("logowanie")]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -110,6 +111,7 @@ namespace Core.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("logowanie")]
         public async Task<ActionResult> Login(AccountLoginApplicationUserViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
@@ -130,6 +132,7 @@ namespace Core.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Route("profil")]
         public async Task<ActionResult> EditProfile()
         {
             var user = await _accountService.FindUserByUserNameAsync(HttpContext.User.Identity.Name);
@@ -144,6 +147,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("profil")]
         public async Task<ActionResult> EditProfile(AccountEditProfileApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -176,6 +180,7 @@ namespace Core.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Route("zmiana-hasla")]
         public ActionResult ChangePassword()
         {
             return View();
@@ -189,6 +194,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("zmiana-hasla")]
         public async Task<ActionResult> ChangePassword(AccountChangePasswordApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -222,6 +228,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
+        [Route("potwierdzenie-email")]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null) return View("Error");
@@ -236,6 +243,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
+        [Route("zapomnialem-hasla")]
         public ActionResult ForgotPassword()
         {
             return View();
@@ -251,6 +259,7 @@ namespace Core.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("zapomnialem-hasla")]
         public async Task<ActionResult> ForgotPassword(AccountForgotPasswordApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -277,6 +286,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
+        [Route("zapomnialem-hasla/potwierdzenie")]
         public ActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -289,6 +299,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
+        [Route("zresetuj-haslo")]
         public ActionResult ResetPassword(string code)
         {
             return code == null ? View("Error") : View();
@@ -302,6 +313,7 @@ namespace Core.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Route("zresetuj-haslo")]
         public async Task<ActionResult> ResetPassword(AccountResetPasswordApplicationUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -321,6 +333,7 @@ namespace Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
+        [Route("zresetuj-haslo/potwierdzenie")]
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
