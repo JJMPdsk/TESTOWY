@@ -5,7 +5,7 @@
 }
 
 <div class="row justify-content-center">
-    <div class="col-10 rounded shadow">
+    <div class="col-12 col-lg-6 rounded border shadow-sm">
 
         <div class="row justify-content-center pt-3">
             <h3>Rejestracja</h3>
@@ -14,7 +14,7 @@
 
         <div class="row justify-content-center p-3">
 
-            <div class="col">
+            <div class="col-12">
                 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
@@ -36,7 +36,7 @@
                         <div class="input-group">
                             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                             <div class="input-group-append">
-                                <div class="btn btn-outline-ezzy-primary rounded-sm" id="passwordTooltip">
+                                <div class="btn btn-outline-primary rounded-sm" id="passwordTooltip">
                                     ?
                                 </div>
                             </div>
